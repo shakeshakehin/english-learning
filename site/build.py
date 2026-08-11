@@ -11,11 +11,12 @@ import re
 import shutil
 from datetime import date
 
-VAULT = r"C:\Users\Administrator\Documents\Obsidian Vault"
-SITE = os.path.join(VAULT, "site")
+SITE = os.path.dirname(os.path.abspath(__file__))  # 本脚本所在目录 = site/
+VAULT = os.path.dirname(SITE)  # 仓库根（本地=vault 根，云端=checkout 目录）
 DOCS = os.path.join(SITE, "docs")
 ARTICLES = os.path.join(VAULT, "Articles")
 LANGUAGES = os.path.join(VAULT, "Languages")
+REPO = VAULT
 
 
 def parse_frontmatter(text):
@@ -113,6 +114,23 @@ def build_index(articles):
         "",
         "软件测试行业英语学习笔记。",
         "",
+    ]
+    # 自动抓取偏好展示（读仓库根 crawl-config.json）
+    crawl_cfg = os.path.join(REPO, "crawl-config.json")
+    if os.path.exists(crawl_cfg):
+        try:
+            c = json.load(open(crawl_cfg, encoding="utf-8"))
+            topics = c.get("topics") or []
+            srcs = [s.split("//")[-1].rstrip("/") for s in c.get("sources", [])]
+            lines += [
+                "> **自动抓取配置**：" + ("；".join(srcs)) +
+                ("（主题：" + "、".join(topics) + "）" if topics else "（全部主题）") +
+                f"，{c.get('min_words', 200)}–{c.get('max_words', 5000)} 词，每次最多 {c.get('max_per_run', 3)} 篇。每天自动更新。",
+                "",
+            ]
+        except Exception:
+            pass
+    lines += [
         '<div id="article-filter">',
         '  <select id="f-category"><option value="">全部类型</option></select>',
         '  <select id="f-topic"><option value="">全部主题</option></select>',

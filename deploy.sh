@@ -12,7 +12,8 @@ cp -r "$VAULT/Articles" "site/docs/Articles"
 # 2. 生成 articles.json / wordDB.json / index.md，复制前端资源
 python "$(cygpath -w "$VAULT/site/build.py")"
 
-# 3. 推送
+# 3. 拉取云端自动抓取的新文章，再推送本地改动
+git pull --rebase --autostash 2>/dev/null || echo "(pull skipped)"
 git add -A
 git commit -m "site update $(date +%Y-%m-%d)" || echo "(no changes to commit)"
 git push

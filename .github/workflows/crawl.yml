@@ -1,0 +1,21 @@
+name: Auto crawl articles
+on:
+  schedule:
+    # 每天 UTC 22:00 = 香港 06:00
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run crawl and publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python crawl_and_build.py
