@@ -18,12 +18,20 @@
     return m ? "/" + m[1] + "/" : "/";
   }
 
-  var isArticlePage = document.querySelector(".md-content") && !document.querySelector("#article-list");
+  var isArticlePage = function () {
+    return !!document.querySelector(".md-content") && !document.querySelector("#article-list");
+  };
 
   /* ================= 生词数据 ================= */
   function loadServerVocab() {
-    return fetch(siteBase() + "wordDB.json", { cache: "no-store" })
-      .then(function (r) { return r.ok ? r.json() : []; })
+    /* 6 秒超时兜底：词表加载失败/超时不影响组件构建 */
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 6000);
+    return fetch(siteBase() + "wordDB.json", { cache: "no-store", signal: ctrl.signal })
+      .then(function (r) {
+        clearTimeout(timer);
+        return r.ok ? r.json() : [];
+      })
       .catch(function () { return []; });
   }
 
@@ -79,6 +87,16 @@
         });
         n.parentNode.replaceChild(frag, n);
       });
+    });
+  }
+
+  /* 生词高亮：对已切词的 .rw 补 vocab 类（词表异步加载后调用） */
+  function applyVocabToTokens(map) {
+    var words = Object.keys(map);
+    if (!words.length) return;
+    var spans = document.querySelectorAll(".md-content .rw, .md-content mark.rw");
+    spans.forEach(function (s) {
+      if (words.indexOf(cleanWord(s.textContent)) >= 0) s.classList.add("vocab");
     });
   }
 
@@ -413,13 +431,23 @@
     return { panel: ui };
   }
 
-  /* ---- 启动 ---- */
-  if (isArticlePage) {
+  /* ---- 启动：DOM 就绪兜底 + 组件先行（不依赖词表网络请求） ---- */
+  function boot() {
+    if (!isArticlePage()) return;
+    /* 组件立即构建（空词表）——即使词表加载失败/超时，滚轮/聚焦也一定可用 */
+    buildFocusReader({});
+    /* 词表异步加载后补生词高亮 */
     loadServerVocab().then(function (server) {
       var map = mergeVocab(server);
       highlightVocab(map);
-      buildFocusReader(map);
-      setupMarking();
+      applyVocabToTokens(map);
     });
+    setupMarking();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
   }
 })();
