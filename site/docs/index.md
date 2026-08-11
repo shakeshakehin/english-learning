@@ -2,7 +2,7 @@
 
 软件测试行业英语学习笔记。
 
-> **自动抓取配置**：softwaretestingnews.co.uk（全部主题），250–5000 词，每次最多 15 篇。每天自动更新。
+> **自动抓取配置**：softwaretestingnews.co.uk（全部主题），250–5000 词，每次最多 3 篇。每天自动更新。
 
 <div id="article-filter">
   <select id="f-category"><option value="">全部类型</option></select>

@@ -3,5 +3,5 @@
   "topics": [],
   "min_words": 250,
   "max_words": 5000,
-  "max_per_run": 15
+  "max_per_run": 3
 }
