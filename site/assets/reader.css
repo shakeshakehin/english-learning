@@ -88,6 +88,33 @@ body.focus-on .rw.vocab {
   color: #e53935;
   font-weight: 600;
 }
+#rw-vocab.marking {
+  border-color: #e53935;
+  color: #e53935;
+  font-weight: 600;
+}
+
+/* ===== 生词面板：标记模式开关 ===== */
+#lexi-modal .lm-mode {
+  margin: 8px 0 4px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.04);
+}
+#lexi-modal .lm-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+#lexi-modal .lm-switch input {
+  width: 16px;
+  height: 16px;
+  accent-color: #e53935;
+  cursor: pointer;
+}
 
 /* ===== 标记提示 toast ===== */
 #lexi-toast {

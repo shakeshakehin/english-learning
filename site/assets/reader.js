@@ -135,7 +135,43 @@
     toastEl._t = setTimeout(function () { toastEl.hidden = true; }, 2200);
   }
 
-  /* ================= 2. 网页标记（框选 + 按 C） ================= */
+  /* ================= 2. 网页标记（框选 + 按 C / 标记模式） ================= */
+  var markingMode = false;
+
+  function markSelection() {
+    var sel = window.getSelection();
+    if (!sel || sel.isCollapsed) { toast("先框选一个单词"); return false; }
+    var text = sel.toString().trim();
+    if (!text) return false;
+    var m = text.match(/[A-Za-z][A-Za-z'\-]*/);
+    if (!m) { toast("选区中没有英文单词"); return false; }
+    var word = m[0].toLowerCase();
+    sel.removeAllRanges();
+    var local = loadLocalVocab();
+    if (local[word]) {
+      toast("「" + word + "」已在生词表中");
+      return true;
+    }
+    var meaning = "";
+    try {
+      meaning = window.prompt("「" + word + "」的中文释义（可留空，稍后补充）：", "").trim();
+    } catch (err) { meaning = ""; }
+    local[word] = { meaning: meaning || "待补充", ts: Date.now() };
+    saveLocalVocab(local);
+    var n = highlightWordInPage(word);
+    toast("✓ 已标记「" + word + "」" + (n ? "（本页高亮 " + n + " 处）" : ""));
+    return true;
+  }
+
+  function setMarkingMode(on) {
+    markingMode = on;
+    var btn = document.getElementById("rw-vocab");
+    if (btn) btn.classList.toggle("marking", on);
+    var chk = document.getElementById("lm-mode");
+    if (chk) chk.checked = on;
+    toast(on ? "标记模式已开启：框选单词即标记" : "标记模式已关闭");
+  }
+
   function setupMarking() {
     document.addEventListener("keydown", function (e) {
       var k = e.key || e.keyCode;
@@ -143,27 +179,15 @@
       if (!isC) return;
       var t = e.target;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-      var sel = window.getSelection();
-      if (!sel || sel.isCollapsed) { toast("先框选一个单词，再按 C 标记"); return; }
-      var text = sel.toString().trim();
-      if (!text) return;
-      var m = text.match(/[A-Za-z][A-Za-z'\-]*/);
-      if (!m) { toast("选区中没有英文单词"); return; }
-      var word = m[0].toLowerCase();
       e.preventDefault();
-      var local = loadLocalVocab();
-      if (local[word]) {
-        toast("「" + word + "」已在生词表中");
-        return;
-      }
-      var meaning = "";
-      try {
-        meaning = window.prompt("「" + word + "」的中文释义（可留空，稍后补充）：", "").trim();
-      } catch (err) { meaning = ""; }
-      local[word] = { meaning: meaning || "待补充", ts: Date.now() };
-      saveLocalVocab(local);
-      var n = highlightWordInPage(word);
-      toast("✓ 已标记「" + word + "」" + (n ? "（本页高亮 " + n + " 处）" : ""));
+      markSelection();
+    });
+    /* 标记模式：框选后松开鼠标即自动标记 */
+    document.addEventListener("mouseup", function (e) {
+      if (!markingMode) return;
+      var t = e.target;
+      if (t && t.closest && t.closest("#reader-controls, #lexi-modal")) return;
+      markSelection();
     });
   }
 
@@ -173,6 +197,11 @@
     modal.id = "lexi-modal";
     modal.innerHTML =
       '<div class="lm-box">' +
+      "<h4>生词标记</h4>" +
+      '<div class="lm-mode">' +
+      '<label class="lm-switch"><input type="checkbox" id="lm-mode">' +
+      "标记模式：框选单词即标记（或随时框选后按键盘 C）</label>" +
+      "</div>" +
       "<h4>本机已标记生词（<span id=\"lm-count\">0</span>）</h4>" +
       '<p class="lm-hint">把下面的表格行复制到本地 Obsidian 的 <code>Languages/wordDB.md</code> 中（释义可修改），' +
       "然后在本地运行 <code>deploy.sh</code>，全站即可同步生效。</p>" +
@@ -222,9 +251,18 @@
     modal.addEventListener("click", function (e) {
       if (e.target === modal) modal.hidden = true;
     });
+    /* 标记模式开关 */
+    document.getElementById("lm-mode").addEventListener("change", function () {
+      setMarkingMode(this.checked);
+    });
 
     return {
-      open: function () { refresh(); modal.hidden = false; },
+      open: function () {
+        refresh();
+        modal.hidden = false;
+        var chk = document.getElementById("lm-mode");
+        if (chk) chk.checked = markingMode;
+      },
     };
   }
 

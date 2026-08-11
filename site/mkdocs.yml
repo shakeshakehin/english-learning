@@ -27,9 +27,9 @@ markdown_extensions:
 extra:
   generator: false
 extra_css:
-  - assets/reader.css?v=20260811e
+  - assets/reader.css?v=20260811f
 extra_javascript:
-  - assets/reader.js?v=20260811e
-  - assets/filter.js?v=20260811e
+  - assets/reader.js?v=20260811f
+  - assets/filter.js?v=20260811f
 plugins:
   - search
