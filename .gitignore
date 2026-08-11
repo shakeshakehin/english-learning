@@ -1,0 +1,9 @@
+# 排除 Obsidian 配置与无关文件，只发布 site/ 站点内容
+.obsidian/
+.trash/
+*.bak
+欢迎.md
+未命名.md
+CANVAS/
+site/site/
+_site/

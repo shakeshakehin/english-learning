@@ -1,0 +1,30 @@
+site_name: English Learning
+site_url: https://shakeshakehin.github.io/english-learning/
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.instant
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+extra:
+  generator: false
+plugins:
+  - search
