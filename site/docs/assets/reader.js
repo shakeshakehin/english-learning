@@ -2,7 +2,8 @@
  * reader.js —— 文章页功能：
  *  1. 生词高亮：wordDB.json（全站同步）+ 本机标记（localStorage）合并高亮
  *  2. 网页标记：框选单词 + 按 C -> 存入本机生词表（可导出表格行合并进本地 wordDB.md）
- *  3. 阅读速度控制：底部进度条 + 播放（词/分钟），当前词下划线
+ *  3. 聚焦阅读（无障碍辅助）：当前词放大高亮 + 当前句淡背景，其余文字淡化；
+ *     页面滚动自动跟随；右侧中间垂直滑块可拖动跳转，滑条上滚轮逐词精细推进
  * ============================================================ */
 (function () {
   "use strict";
@@ -40,7 +41,6 @@
     return t.replace(/^[^A-Za-z]+/, "").replace(/[^A-Za-z]+$/, "").toLowerCase();
   }
 
-  /* 全部词表：服务器 + 本机（返回 {word: meaning}） */
   function mergeVocab(serverList) {
     var map = {};
     (serverList || []).forEach(function (w) { map[w.word.toLowerCase()] = w.meaning || ""; });
@@ -82,7 +82,7 @@
     });
   }
 
-  /* 标记新词后：页面内立即高亮该词（对已切词的 span 或文本节点） */
+  /* 标记新词后：页面内立即高亮该词 */
   function highlightWordInPage(word) {
     var spans = document.querySelectorAll(".md-content .rw, .md-content mark.rw");
     var hit = 0;
@@ -93,7 +93,6 @@
       }
     });
     if (hit) return hit;
-    /* 未切词时回退到文本节点扫描 */
     var paras = document.querySelectorAll(".md-content p");
     paras.forEach(function (p) {
       var walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
@@ -102,25 +101,21 @@
       nodes.forEach(function (n) {
         if (!n.textContent.trim()) return;
         if (n.parentElement && n.parentElement.closest("a, code, mark, h1, h2, h3, h4, h5, h6, pre")) return;
-        var re = new RegExp("(^|\\\\s)(" + word + ")(?=\\\\s|$|[.,;:!?'\"])", "i");
-        if (re.test(n.textContent)) {
-          var parts = n.textContent.split(/(\s+)/);
-          var frag = document.createDocumentFragment();
-          parts.forEach(function (part) {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-            if (cleanWord(part) === word) {
-              var mark = document.createElement("mark");
-              mark.className = "rw vocab";
-              mark.textContent = part;
-              frag.appendChild(mark);
-            } else {
-              frag.appendChild(document.createTextNode(part));
-            }
-          });
-          n.parentNode.replaceChild(frag, n);
-          hit++;
-        }
+        var parts = n.textContent.split(/(\s+)/);
+        var frag = document.createDocumentFragment();
+        parts.forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          if (cleanWord(part) === word) {
+            var mark = document.createElement("mark");
+            mark.className = "rw vocab";
+            mark.textContent = part;
+            frag.appendChild(mark);
+          } else {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        n.parentNode.replaceChild(frag, n);
       });
     });
     return hit;
@@ -233,15 +228,16 @@
     };
   }
 
-  /* ================= 3. 阅读速度控制 ================= */
-  function buildReader(map) {
+  /* ================= 3. 聚焦阅读（无障碍） ================= */
+  function buildFocusReader(map) {
     var content = document.querySelector(".md-content");
     if (!content) return null;
     var paras = content.querySelectorAll("p");
     if (!paras.length) return null;
 
-    /* 切词：正文段落文本切成 span.rw（跳过 a/code/mark/h 内） */
+    /* 切词 + 分句：每个词记录句子编号（data-sid，按句末标点递增） */
     var tokens = [];
+    var sid = 0;
     paras.forEach(function (p) {
       var walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
       var nodes = [];
@@ -257,15 +253,17 @@
           var span = document.createElement("span");
           span.className = "rw";
           span.textContent = part;
+          span.dataset.sid = sid;
           frag.appendChild(span);
           tokens.push(span);
+          if (/[.!?;:]$/.test(part)) sid++;
         });
         n.parentNode.replaceChild(frag, n);
       });
     });
     if (tokens.length < 20) return null;
 
-    /* 生词标记：切词后的 span 若在词表 → vocab 类 */
+    /* 生词标记：切词后词表词 → vocab 类 */
     var words = Object.keys(map);
     if (words.length) {
       tokens.forEach(function (s) {
@@ -273,77 +271,116 @@
       });
     }
 
-    /* UI */
+    /* UI：右侧中间垂直控制条（聚焦开关 + 滑块 + 位置） */
     var ui = document.createElement("div");
     ui.id = "reader-controls";
     ui.innerHTML =
-      '<span class="rw-label">速度</span>' +
-      '<select id="rw-speed">' +
-      '<option value="120">120 词/分</option>' +
-      '<option value="200" selected>200 词/分</option>' +
-      '<option value="300">300 词/分</option>' +
-      '<option value="450">450 词/分</option>' +
-      "</select>" +
-      '<button id="rw-play">播放</button>' +
-      '<input type="range" id="rw-progress" min="0" max="100" value="0">' +
-      '<span id="rw-pos">0 / ' + tokens.length + "</span>" +
+      '<button id="rw-focus" class="on" title="聚焦模式：突出当前词与句子，淡化其余文字">聚焦</button>' +
+      '<input type="range" id="rw-progress" orient="vertical" min="0" max="100" value="0" ' +
+      'title="拖动跳转位置；在滑条上滚动鼠标滚轮可逐词推进">' +
+      '<span id="rw-pos">1 / ' + tokens.length + "</span>" +
       '<button id="rw-vocab" title="查看本机标记的生词">生词</button>';
     document.body.appendChild(ui);
 
     var progress = document.getElementById("rw-progress");
     var posEl = document.getElementById("rw-pos");
-    var playBtn = document.getElementById("rw-play");
-    var speedSel = document.getElementById("rw-speed");
+    var focusBtn = document.getElementById("rw-focus");
+    var vocabBtn = document.getElementById("rw-vocab");
 
-    var currentIdx = 0;
-    var timer = null;
-    var playing = false;
+    var focusOn = true;
+    var currentEl = null;
 
-    function setCurrent(idx) {
-      idx = Math.max(0, Math.min(tokens.length - 1, idx));
-      if (tokens[currentIdx]) tokens[currentIdx].classList.remove("current", "done");
-      currentIdx = idx;
-      var el = tokens[currentIdx];
+    function clearFocus() {
+      if (currentEl) currentEl.classList.remove("current");
+      tokens.forEach(function (t) { t.classList.remove("sentence-active"); });
+      currentEl = null;
+    }
+
+    function setFocus(el, opts) {
+      opts = opts || {};
+      clearFocus();
+      currentEl = el;
       el.classList.add("current");
-      for (var i = 0; i < currentIdx; i++) tokens[i].classList.add("done");
-      for (var j = currentIdx + 1; j < tokens.length; j++) tokens[j].classList.remove("done");
-      progress.value = Math.round((currentIdx / (tokens.length - 1)) * 100);
-      posEl.textContent = (currentIdx + 1) + " / " + tokens.length;
-      var r = el.getBoundingClientRect();
-      if (r.top < 60 || r.bottom > window.innerHeight - 80) {
-        el.scrollIntoView({ block: "center", behavior: "smooth" });
+      var s = el.dataset.sid;
+      tokens.forEach(function (t) {
+        if (t.dataset.sid === s) t.classList.add("sentence-active");
+      });
+      document.body.classList.add("focus-on");
+      var idx = tokens.indexOf(el);
+      progress.value = Math.round((idx / (tokens.length - 1)) * 100);
+      posEl.textContent = (idx + 1) + " / " + tokens.length;
+      if (opts.scroll) {
+        var r = el.getBoundingClientRect();
+        if (r.top < 90 || r.bottom > window.innerHeight - 90) {
+          el.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
       }
     }
 
-    function stop() {
-      playing = false;
-      if (timer) clearInterval(timer);
-      timer = null;
-      playBtn.textContent = "播放";
+    function findCenterWord() {
+      var mid = window.innerHeight / 2;
+      var best = null;
+      var bestDist = Infinity;
+      tokens.forEach(function (t) {
+        var r = t.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var c = (r.top + r.bottom) / 2;
+        var d = Math.abs(c - mid);
+        if (d < bestDist) { bestDist = d; best = t; }
+      });
+      return best;
     }
 
-    playBtn.addEventListener("click", function () {
-      if (playing) { stop(); return; }
-      playing = true;
-      playBtn.textContent = "暂停";
-      var wpm = parseInt(speedSel.value, 10);
-      var delay = Math.round(60000 / wpm);
-      if (currentIdx >= tokens.length - 1) setCurrent(0);
-      timer = setInterval(function () {
-        if (currentIdx >= tokens.length - 1) { stop(); return; }
-        setCurrent(currentIdx + 1);
-      }, delay);
-    });
+    /* 页面滚动 → 聚焦跟随视口中心词 */
+    var scrollTimer = null;
+    window.addEventListener("scroll", function () {
+      if (!focusOn) return;
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function () {
+        var el = findCenterWord();
+        if (el && el !== currentEl) setFocus(el, {});
+      }, 120);
+    }, { passive: true });
 
-    speedSel.addEventListener("change", function () {
-      if (playing) { stop(); playBtn.click(); }
-    });
-
+    /* 滑块拖动 → 跳转 */
     progress.addEventListener("input", function () {
-      if (playing) stop();
       var pct = parseInt(progress.value, 10);
-      setCurrent(Math.round((pct / 100) * (tokens.length - 1)));
+      var idx = Math.round((pct / 100) * (tokens.length - 1));
+      setFocus(tokens[idx], { scroll: true });
     });
+
+    /* 滑块上滚轮 → 逐词精细推进 */
+    progress.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      var delta = e.deltaY > 0 ? 1 : -1;
+      var idx = currentEl ? tokens.indexOf(currentEl) : 0;
+      idx = Math.max(0, Math.min(tokens.length - 1, idx + delta));
+      setFocus(tokens[idx], { scroll: true });
+    }, { passive: false });
+
+    /* 聚焦开关 */
+    focusBtn.addEventListener("click", function () {
+      focusOn = !focusOn;
+      focusBtn.classList.toggle("on", focusOn);
+      document.body.classList.toggle("focus-on", focusOn);
+      if (focusOn) {
+        var el = currentEl || findCenterWord();
+        if (el) setFocus(el, {});
+      } else {
+        clearFocus();
+        document.body.classList.remove("focus-on");
+      }
+    });
+
+    /* 生词面板 */
+    var panel = setupVocabPanel();
+    vocabBtn.addEventListener("click", function () { panel.open(); });
+
+    /* 初始聚焦：视口中心词 */
+    setTimeout(function () {
+      var el = findCenterWord();
+      if (el) setFocus(el, {});
+    }, 150);
 
     return { panel: ui };
   }
@@ -353,11 +390,8 @@
     loadServerVocab().then(function (server) {
       var map = mergeVocab(server);
       highlightVocab(map);
-      var reader = buildReader(map);
+      buildFocusReader(map);
       setupMarking();
-      var panel = setupVocabPanel();
-      var vocabBtn = reader && reader.panel.querySelector("#rw-vocab");
-      if (vocabBtn) vocabBtn.addEventListener("click", function () { panel.open(); });
     });
   }
 })();
