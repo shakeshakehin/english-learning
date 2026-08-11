@@ -1,5 +1,5 @@
 ---
-title: "Microchip Launches 3.3 kV HV‑D3 mSiC® Power Modules to Enable Solid-State Transformers for AI Data Centers"
+title: "Microchip Launches 3.3 kV HV-D3 mSiC Power Modules to Enable Solid-State Transformers for AI Data Centers"
 source: "Software Testing News"
 url: "https://softwaretestingnews.co.uk/microchip-launches-3-3-kv-hv-d3-msic/"
 published: 2026-05-26

@@ -1,5 +1,5 @@
 ---
-title: "Tricentis Report: 60% of Global Organizations are Shipping Untested Code as AI Accelerates Software Development"
+title: "Tricentis Report: 60% of Global Organizations are Shipping Untested Code as AI Accelerates Software Development"
 source: "Software Testing News"
 url: "https://softwaretestingnews.co.uk/untested-code-as-ai-accelerates-software-development/"
 published: 2026-06-04

@@ -1,5 +1,5 @@
 ---
-title: "95% of CISOs Pressured to Suppress or Delay Compliance-Related Security Issues, Even as AI-Generated Code Multiplies Their Attack Surface"
+title: "95% of CISOs Pressured to Suppress or Delay Compliance-Related Security Issues, Even as AI-Generated Code Multiplies Their Attack Surface"
 source: "Software Testing News"
 url: "https://softwaretestingnews.co.uk/95-of-cisos-pressured-to-suppress-or-delay-compliance-related-security-issues/"
 published: 2026-06-09

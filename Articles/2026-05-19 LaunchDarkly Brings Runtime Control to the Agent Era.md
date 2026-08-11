@@ -1,5 +1,5 @@
 ---
-title: "LaunchDarkly Brings Runtime Control to the Agent Era"
+title: "LaunchDarkly Brings Runtime Control to the Agent Era"
 source: "Software Testing News"
 url: "https://softwaretestingnews.co.uk/launchdarkly-brings-runtime-control-to-the-agent-era/"
 published: 2026-05-19
