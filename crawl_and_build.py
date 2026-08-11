@@ -78,7 +78,8 @@ def main():
         if len(added) >= cfg.get("max_per_run", 3):
             break
         key = p["title"].lower()
-        if key in existing:
+        # 去重：标题是已存在文件名（日期+标题）的子串即视为已抓
+        if any(key in e for e in existing):
             continue
         tags = match_topics(cfg, p["title"], p["content"])
         if cfg.get("topics") and not tags:
