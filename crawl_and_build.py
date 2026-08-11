@@ -27,6 +27,14 @@ def load_config():
     return json.load(open(os.path.join(REPO, "crawl-config.json"), encoding="utf-8"))
 
 
+def match_topics(cfg, title, body):
+    topics = cfg.get("topics") or []
+    if not topics:
+        return []
+    hay = (title + " " + body[:3000]).lower()
+    return [t for t in topics if t.lower() in hay]
+
+
 def list_posts(cfg):
     """WordPress REST API 拉最新文章（标题/日期/链接/正文）"""
     base = cfg["sources"][0].rstrip("/")
@@ -57,16 +65,15 @@ def clean_content(raw_html):
     return text
 
 
-def match_topics(cfg, title, body):
-    topics = cfg.get("topics") or []
-    if not topics:
-        return []
-    hay = (title + " " + body[:3000]).lower()
-    return [t for t in topics if t.lower() in hay]
-
-
 def main():
     cfg = load_config()
+    # 命令行关键词覆盖（--keyword ai,automation）
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--keyword", help="抓取关键词（逗号分隔），覆盖配置 topics")
+    args = ap.parse_args()
+    if args.keyword:
+        cfg["topics"] = [k.strip() for k in args.keyword.split(",") if k.strip()]
     posts = list_posts(cfg)
     existing_slugs = set()
     existing_names = set()
@@ -100,7 +107,13 @@ def main():
         if words < cfg.get("min_words", 250) or words > cfg.get("max_words", 5000):
             continue
         fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {p['title']}.md").replace("\xa0", " ")
-        category = (tags[0].capitalize() if tags else "General")
+        # 分类映射：关键词命中映射表则用映射类型，否则 General
+        cats_map = cfg.get("categories") or {}
+        category = "General"
+        for t in tags:
+            if t.lower() in cats_map:
+                category = cats_map[t.lower()]
+                break
         front = (
             f'---\ntitle: "{p["title"]}"\nsource: "Software Testing News"\n'
             f'url: "{p["link"]}"\npublished: {p["date"]}\n'
