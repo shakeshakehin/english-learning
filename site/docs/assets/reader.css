@@ -61,6 +61,100 @@
 #rw-play:hover {
   background: rgba(0, 0, 0, 0.06);
 }
+#rw-vocab {
+  font-size: 13px;
+  padding: 3px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+#rw-vocab:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ===== 标记提示 toast ===== */
+#lexi-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 70px;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: rgba(30, 30, 30, 0.92);
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 生词管理弹窗 ===== */
+#lexi-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#lexi-modal[hidden] {
+  display: none;
+}
+#lexi-modal .lm-box {
+  background: var(--md-default-bg-color, #fff);
+  color: var(--md-default-fg-color, #333);
+  border-radius: 10px;
+  padding: 20px 24px;
+  max-width: 520px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: auto;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+#lexi-modal h4 {
+  margin: 0 0 8px;
+}
+#lexi-modal .lm-hint {
+  font-size: 13px;
+  opacity: 0.75;
+  margin: 0 0 12px;
+}
+#lexi-modal code {
+  background: rgba(0, 0, 0, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+#lm-rows {
+  width: 100%;
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 13px;
+  padding: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  box-sizing: border-box;
+  resize: vertical;
+  background: var(--md-code-bg-color, #f5f5f5);
+  color: inherit;
+}
+#lexi-modal .lm-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+#lexi-modal .lm-btns button {
+  font-size: 13px;
+  padding: 5px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+#lexi-modal .lm-btns button:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
 
 /* 底部留白，避免内容被控制条遮挡 */
 .md-content__inner {
