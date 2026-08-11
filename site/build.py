@@ -71,14 +71,21 @@ def build_worddb_json():
     words = []
     for line in open(path, encoding="utf-8"):
         line = line.strip()
-        if not line or line.startswith(("|", "#", ">", "-", "**", "*")):
+        if not line:
             continue
-        m = re.match(r"^(.+?)[\t|]{1,2}(.+)$", line)
-        if not m:
-            m = re.match(r"^([a-zA-Z][a-zA-Z'\-]*)\s*[:：]\s*(.+)$", line)
-        if m:
-            w = m.group(1).strip().lower()
-            meaning = m.group(2).strip().strip("|").strip()
+        w = meaning = None
+        if line.startswith("|"):
+            # 表格行: | word | meaning |
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            if len(cells) >= 2 and cells[0]:
+                w, meaning = cells[0], cells[1]
+        else:
+            m = re.match(r"^([a-zA-Z][a-zA-Z'\-]*)\s*[:：|]\s*(.+)$", line)
+            if m:
+                w, meaning = m.group(1), m.group(2)
+        if w and meaning:
+            w = w.strip().lower()
+            meaning = meaning.strip()
             if re.fullmatch(r"[a-z][a-z'\-]*", w) and meaning:
                 words.append({"word": w, "meaning": meaning})
     # 去重（保留首个）

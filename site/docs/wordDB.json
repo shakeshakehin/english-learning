@@ -1,1 +1,26 @@
-[]
+[
+ {
+  "word": "catalyst",
+  "meaning": "催化剂；触发因素"
+ },
+ {
+  "word": "pivotal",
+  "meaning": "关键的，核心的"
+ },
+ {
+  "word": "streamline",
+  "meaning": "精简，使效率化"
+ },
+ {
+  "word": "regression",
+  "meaning": "回归（测试）"
+ },
+ {
+  "word": "assertion",
+  "meaning": "断言"
+ },
+ {
+  "word": "flaky",
+  "meaning": "不稳定的（测试）"
+ }
+]
