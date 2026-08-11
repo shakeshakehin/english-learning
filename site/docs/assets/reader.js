@@ -271,18 +271,16 @@
       });
     }
 
-    /* UI：右侧中间垂直控制条（聚焦开关 + 滑块 + 位置） */
+    /* UI：右侧中间控制条（无滑块；鼠标悬停控制条 + 滚轮 = 逐词推进） */
     var ui = document.createElement("div");
     ui.id = "reader-controls";
     ui.innerHTML =
       '<button id="rw-focus" class="on" title="聚焦模式：突出当前词与句子，淡化其余文字">聚焦</button>' +
-      '<input type="range" id="rw-progress" orient="vertical" min="0" max="100" value="0" ' +
-      'title="拖动跳转位置；在滑条上滚动鼠标滚轮可逐词推进">' +
       '<span id="rw-pos">1 / ' + tokens.length + "</span>" +
-      '<button id="rw-vocab" title="查看本机标记的生词">生词</button>';
+      '<button id="rw-vocab" title="查看本机标记的生词">生词</button>' +
+      '<span class="rw-hint">悬停此处<br>滚轮推进</span>';
     document.body.appendChild(ui);
 
-    var progress = document.getElementById("rw-progress");
     var posEl = document.getElementById("rw-pos");
     var focusBtn = document.getElementById("rw-focus");
     var vocabBtn = document.getElementById("rw-vocab");
@@ -307,7 +305,6 @@
       });
       document.body.classList.add("focus-on");
       var idx = tokens.indexOf(el);
-      progress.value = Math.round((idx / (tokens.length - 1)) * 100);
       posEl.textContent = (idx + 1) + " / " + tokens.length;
       if (opts.scroll) {
         var r = el.getBoundingClientRect();
@@ -342,15 +339,8 @@
       }, 120);
     }, { passive: true });
 
-    /* 滑块拖动 → 跳转 */
-    progress.addEventListener("input", function () {
-      var pct = parseInt(progress.value, 10);
-      var idx = Math.round((pct / 100) * (tokens.length - 1));
-      setFocus(tokens[idx], { scroll: true });
-    });
-
-    /* 滑块上滚轮 → 逐词精细推进 */
-    progress.addEventListener("wheel", function (e) {
+    /* 控制条区域滚轮 → 逐词精细推进（悬停控制条时滚轮不滚动页面） */
+    ui.addEventListener("wheel", function (e) {
       e.preventDefault();
       var delta = e.deltaY > 0 ? 1 : -1;
       var idx = currentEl ? tokens.indexOf(currentEl) : 0;

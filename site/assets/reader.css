@@ -12,21 +12,22 @@
 }
 
 /* 聚焦模式：非当前内容淡化（当前词/当前句突出） */
-body.focus-on .md-content .rw {
+body.focus-on .rw {
   opacity: 0.22;
   transition: opacity 0.25s;
 }
-body.focus-on .md-content .rw.sentence-active {
-  opacity: 0.9;
+body.focus-on .rw.sentence-active {
+  opacity: 0.92;
+  background: rgba(255, 213, 79, 0.16);
 }
-body.focus-on .md-content .rw.current {
+body.focus-on .rw.current {
   opacity: 1;
   font-size: 1.25em;
   font-weight: 700;
   background: transparent;
 }
 /* 聚焦模式下生词荧光笔减弱为淡黄色，避免干扰 */
-body.focus-on .md-content .rw.vocab {
+body.focus-on .rw.vocab {
   background: linear-gradient(transparent 55%, rgba(255, 213, 79, 0.5) 55%);
 }
 
@@ -48,14 +49,7 @@ body.focus-on .md-content .rw.vocab {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
   font-size: 12px;
   font-family: var(--md-text-font, inherit);
-}
-#rw-progress {
-  writing-mode: vertical-lr;
-  direction: rtl;
-  height: 38vh;
-  width: 22px;
-  accent-color: #e53935;
-  cursor: pointer;
+  cursor: ns-resize;
 }
 #rw-pos {
   writing-mode: vertical-rl;
@@ -65,6 +59,13 @@ body.focus-on .md-content .rw.vocab {
   color: inherit;
   opacity: 0.75;
   font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+.rw-hint {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 10px;
+  opacity: 0.5;
   user-select: none;
 }
 #rw-focus,
