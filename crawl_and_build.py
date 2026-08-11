@@ -68,18 +68,29 @@ def match_topics(cfg, title, body):
 def main():
     cfg = load_config()
     posts = list_posts(cfg)
-    existing = set()
+    existing_slugs = set()
+    existing_names = set()
     for fn in os.listdir(ARTICLES):
-        if fn.endswith(".md"):
-            existing.add(fn[:-3].lower())
+        if not fn.endswith(".md"):
+            continue
+        existing_names.add(fn[:-3].lower())
+        try:
+            raw = open(os.path.join(ARTICLES, fn), encoding="utf-8").read()
+            m = re.search(r'^url:\s*"?([^"\n]+)"?', raw, re.M)
+            if m:
+                slug = m.group(1).rstrip("/").split("/")[-1].lower()
+                existing_slugs.add(slug)
+        except Exception:
+            pass
 
     added = []
     for p in posts:
         if len(added) >= cfg.get("max_per_run", 3):
             break
+        slug = p["link"].rstrip("/").split("/")[-1].lower()
         key = p["title"].lower()
-        # 去重：标题是已存在文件名（日期+标题）的子串即视为已抓
-        if any(key in e for e in existing):
+        # 去重：URL slug 相同，或标题是已存在文件名子串
+        if slug in existing_slugs or any(key in e for e in existing_names):
             continue
         tags = match_topics(cfg, p["title"], p["content"])
         if cfg.get("topics") and not tags:
@@ -98,7 +109,8 @@ def main():
             f'type: article\n---\n\n# {p["title"]}\n\n{body}\n'
         )
         open(os.path.join(ARTICLES, fn), "w", encoding="utf-8").write(front)
-        existing.add(key)
+        existing_slugs.add(slug)
+        existing_names.add(fn[:-3].lower())
         added.append((fn, words))
         print("ADDED:", fn, f"({words} words)")
 
