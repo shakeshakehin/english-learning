@@ -6,6 +6,7 @@ url: https://softwaretestingnews.co.uk/how-automation-is-shaping-the-future-of-t
 published: 2025-07-21
 added: 2026-08-11
 category: Automation
+tags: [automation, digital-transformation, business]
 type: article
 ---
 

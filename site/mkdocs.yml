@@ -26,5 +26,10 @@ markdown_extensions:
   - md_in_html
 extra:
   generator: false
+extra_css:
+  - assets/reader.css
+extra_javascript:
+  - assets/reader.js
+  - assets/filter.js
 plugins:
   - search

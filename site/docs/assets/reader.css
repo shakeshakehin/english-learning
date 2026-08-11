@@ -1,0 +1,132 @@
+/* ===== 生词高亮：荧光笔效果 ===== */
+.rw.vocab {
+  background: linear-gradient(transparent 55%, #ffd54f 55%);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* ===== 阅读速度：当前词下划线 ===== */
+.rw.current {
+  border-bottom: 3px solid #e53935;
+}
+
+/* 已读词淡化（播放模式） */
+.rw.done {
+  opacity: 0.45;
+}
+
+/* ===== 阅读控制条（固定底部） ===== */
+#reader-controls {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--md-default-bg-color, #ffffff);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  font-family: var(--md-text-font, inherit);
+}
+#reader-controls .rw-label {
+  white-space: nowrap;
+}
+#rw-progress {
+  flex: 1;
+  accent-color: #e53935;
+  min-width: 120px;
+}
+#rw-speed {
+  font-size: 13px;
+  padding: 2px 4px;
+}
+#rw-pos {
+  min-width: 90px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+#rw-play {
+  font-size: 13px;
+  padding: 3px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+#rw-play:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* 底部留白，避免内容被控制条遮挡 */
+.md-content__inner {
+  margin-bottom: 64px;
+}
+
+/* ===== 首页筛选 ===== */
+#article-filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 16px 0;
+}
+#article-filter select,
+#article-filter input {
+  font-size: 14px;
+  padding: 4px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  background: var(--md-default-bg-color, #fff);
+  color: inherit;
+}
+#article-filter input[type="number"] {
+  width: 110px;
+}
+#article-filter button {
+  font-size: 13px;
+  padding: 4px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+#article-filter button:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+.article-card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 10px 0;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 0.15s;
+}
+.article-card:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  color: inherit;
+}
+.article-card .ac-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.article-card .ac-meta {
+  font-size: 12px;
+  opacity: 0.7;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.article-card .ac-meta .tag {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 0 8px;
+  line-height: 18px;
+}

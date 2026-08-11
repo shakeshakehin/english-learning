@@ -6,6 +6,7 @@ url: "https://softwaretestingnews.co.uk/testing-ai-infused-applications/"
 published: 2026-07-20
 added: 2026-08-11
 category: "AI / QA"
+tags: [ai, testing, qa]
 type: article
 ---
 
