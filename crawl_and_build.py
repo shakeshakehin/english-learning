@@ -99,7 +99,7 @@ def main():
         words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
         if words < cfg.get("min_words", 250) or words > cfg.get("max_words", 5000):
             continue
-        fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {p['title']}.md")
+        fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {p['title']}.md").replace("\xa0", " ")
         category = (tags[0].capitalize() if tags else "General")
         front = (
             f'---\ntitle: "{p["title"]}"\nsource: "Software Testing News"\n'
