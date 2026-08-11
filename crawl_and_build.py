@@ -33,7 +33,7 @@ def list_posts(cfg):
     data = json.loads(fetch(base + "/wp-json/wp/v2/posts?per_page=20"))
     posts = []
     for p in data:
-        title = re.sub(r"<[^>]+>", "", p["title"]["rendered"]).strip()
+        title = H.unescape(re.sub(r"<[^>]+>", "", p["title"]["rendered"])).strip()
         if not title:
             continue
         posts.append({
