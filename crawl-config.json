@@ -15,13 +15,13 @@
     {
       "url": "https://perfectdailygrind.com",
       "label": "Perfect Daily Grind",
-      "topics": ["pour over", "pour-over", "brew", "drip", "v60", "chemex", "hand brewing", "filter coffee"],
+      "topics": ["pour over", "pour-over", "v60", "chemex", "hand brewing", "filter coffee", "drip coffee"],
       "category": "Coffee"
     },
     {
       "url": "https://sprudge.com",
       "label": "Sprudge",
-      "topics": ["pour over", "pour-over", "brew guide", "v60", "chemex", "filter coffee"],
+      "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee"],
       "category": "Coffee"
     }
   ],
