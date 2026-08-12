@@ -11,18 +11,21 @@ import re
 import subprocess
 import sys
 import urllib.parse
-import urllib.request
+
+import requests
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 ARTICLES = os.path.join(REPO, "Articles")
 STATE_FILE = os.path.join(REPO, "crawl-state.json")
 UA = {"User-Agent": "Mozilla/5.0 (English-Learning-Site/1.0; +https://shakeshakehin.github.io/english-learning/)"}
+_SESSION = requests.Session()
+_SESSION.headers.update(UA)
 
 
 def fetch(url):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=40) as r:
-        return r.read().decode("utf-8", "ignore")
+    r = _SESSION.get(url, timeout=40)
+    r.raise_for_status()
+    return r.text
 
 
 def load_state():
@@ -53,7 +56,10 @@ def list_posts(src, since):
     params = "per_page=20&_fields=title,date,link"
     if since:
         params += "&after=" + urllib.parse.quote(since + "T00:00:00")
-    data = json.loads(fetch(base + "/wp-json/wp/v2/posts?" + params))
+    try:
+        data = json.loads(fetch(base + "/wp-json/wp/v2/posts?" + params))
+    except Exception:
+        return []  # 单源失败不中断整体
     posts = []
     for p in data:
         title = H.unescape(re.sub(r"<[^>]+>", "", p["title"]["rendered"])).strip()
@@ -67,7 +73,10 @@ def fetch_content(src, link):
     """按需拉单篇正文（仅候选文章）"""
     slug = link.rstrip("/").split("/")[-1]
     url = src["url"].rstrip("/") + "/wp-json/wp/v2/posts?slug=" + urllib.parse.quote(slug) + "&_fields=content"
-    data = json.loads(fetch(url))
+    try:
+        data = json.loads(fetch(url))
+    except Exception:
+        return ""
     return data[0]["content"]["rendered"] if data else ""
 
 
