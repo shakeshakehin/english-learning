@@ -10,10 +10,12 @@ import os
 import re
 import subprocess
 import sys
+import urllib.parse
 import urllib.request
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 ARTICLES = os.path.join(REPO, "Articles")
+STATE_FILE = os.path.join(REPO, "crawl-state.json")
 UA = {"User-Agent": "Mozilla/5.0 (English-Learning-Site/1.0; +https://shakeshakehin.github.io/english-learning/)"}
 
 
@@ -21,6 +23,17 @@ def fetch(url):
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=40) as r:
         return r.read().decode("utf-8", "ignore")
+
+
+def load_state():
+    try:
+        return json.load(open(STATE_FILE, encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def save_state(state):
+    json.dump(state, open(STATE_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
 def load_config():
@@ -34,22 +47,28 @@ def match_topics(topics, title, body):
     return [t for t in topics if t.lower() in hay]
 
 
-def list_posts(src):
-    """WordPress REST API 拉最新文章（标题/日期/链接/正文）"""
+def list_posts(src, since):
+    """增量拉文章列表（字段瘦身：仅 title/date/link；since 后仅拉新文章）"""
     base = src["url"].rstrip("/")
-    data = json.loads(fetch(base + "/wp-json/wp/v2/posts?per_page=20"))
+    params = "per_page=20&_fields=title,date,link"
+    if since:
+        params += "&after=" + urllib.parse.quote(since + "T00:00:00")
+    data = json.loads(fetch(base + "/wp-json/wp/v2/posts?" + params))
     posts = []
     for p in data:
         title = H.unescape(re.sub(r"<[^>]+>", "", p["title"]["rendered"])).strip()
         if not title:
             continue
-        posts.append({
-            "title": title,
-            "date": p["date"][:10],
-            "link": p["link"],
-            "content": p["content"]["rendered"],
-        })
+        posts.append({"title": title, "date": p["date"][:10], "link": p["link"]})
     return posts
+
+
+def fetch_content(src, link):
+    """按需拉单篇正文（仅候选文章）"""
+    slug = link.rstrip("/").split("/")[-1]
+    url = src["url"].rstrip("/") + "/wp-json/wp/v2/posts?slug=" + urllib.parse.quote(slug) + "&_fields=content"
+    data = json.loads(fetch(url))
+    return data[0]["content"]["rendered"] if data else ""
 
 
 def clean_content(raw_html):
@@ -89,6 +108,8 @@ def main():
         except Exception:
             pass
 
+    state = load_state()
+    today = datetime.date.today().isoformat()
     added = []
     for src in cfg.get("sources", []):
         if len(added) >= cfg.get("max_per_run", 3):
@@ -97,7 +118,8 @@ def main():
         src_label = src.get("label") or src["url"].split("//")[-1].rstrip("/")
         src_cats = src.get("categories") or {}
         fixed_cat = src.get("category")
-        for p in list_posts(src):
+        since = state.get(src["url"])
+        for p in list_posts(src, since):
             if len(added) >= cfg.get("max_per_run", 3):
                 break
             slug = p["link"].rstrip("/").split("/")[-1].lower()
@@ -105,10 +127,18 @@ def main():
             # 去重：URL slug 相同，或标题是已存在文件名子串
             if slug in existing_slugs or any(key in e for e in existing_names):
                 continue
-            tags = match_topics(topics, p["title"], p["content"])
+            # 标题层预过滤：标题不含关键词 → 跳过（不抓正文，省时间）
+            if topics:
+                tl = p["title"].lower()
+                if not any(t.lower() in tl for t in topics):
+                    continue
+            content = fetch_content(src, p["link"])
+            if not content:
+                continue
+            tags = match_topics(topics, p["title"], content)
             if topics and not tags:
                 continue
-            body = clean_content(p["content"])
+            body = clean_content(content)
             words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
             if words < cfg.get("min_words", 250) or words > cfg.get("max_words", 5000):
                 continue
@@ -132,6 +162,9 @@ def main():
             existing_names.add(fn[:-3].lower())
             added.append((fn, words))
             print("ADDED:", fn, f"({words} words)")
+        # 该源处理完：记录增量游标（下次只拉今天之后的新文章）
+        state[src["url"]] = today
+    save_state(state)
 
     if not added:
         print("no new articles")
