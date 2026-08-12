@@ -11,6 +11,12 @@ type: article
 
 # Parasoft Eliminates Dependency Bottlenecks With MCP-Powered, AI-Driven API Mocking
 
+### Key takeaways
+
+- Parasoft announced autonomous API mocking via the Model Context Protocol (MCP).
+- The Virtualize MCP server lets AI agents generate, deploy, and manage REST API mocks in build pipelines.
+- This removes dependency bottlenecks and accelerates testing and delivery cycles.
+
 MONROVIA, Calif.
 
 – May 19, 2026 – Parasoft, a global leader in automated software testing solutions, today announced autonomous API mocking for enterprise service virtualization via the Model Context Protocol (MCP)—eliminating dependency bottlenecks.

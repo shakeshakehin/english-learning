@@ -1,0 +1,38 @@
+{
+ "catalyst": {
+  "word": "catalyst",
+  "meaning": "催化剂；促成变化的人",
+  "def_en": "something that makes a chemical reaction happen more quickly without itself being changed；an event or person that causes great change",
+  "pos": ""
+ },
+ "pivotal": {
+  "word": "pivotal",
+  "meaning": "关键性的",
+  "def_en": "central and important",
+  "pos": ""
+ },
+ "streamline": {
+  "word": "streamline",
+  "meaning": "把；使",
+  "def_en": "to shape something so that it can move as effectively and quickly as possible through a liquid or gas；to improve the effectiveness of an organization such as a business or government, often by making the way activities are performed simpler",
+  "pos": ""
+ },
+ "regression": {
+  "word": "regression",
+  "meaning": "消退",
+  "def_en": "the fact of an illness or its symptoms (= effects) becoming less severe",
+  "pos": ""
+ },
+ "assertion": {
+  "word": "assertion",
+  "meaning": "断言",
+  "def_en": "a statement that you strongly believe is true",
+  "pos": ""
+ },
+ "flaky": {
+  "word": "flaky",
+  "meaning": "易碎成小薄片的；疯疯癫癫的",
+  "def_en": "coming off easily in small, flat, thin pieces；behaving in a way that is strange, not responsible or not expected",
+  "pos": ""
+ }
+}

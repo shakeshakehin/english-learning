@@ -12,6 +12,12 @@ type: article
 
 # Testing AI-Infused Applications
 
+### Key takeaways
+
+- Embedded AI components are nondeterministic, breaking the same-input/same-output premise of traditional test automation.
+- Service virtualization stabilizes test environments by controlling dependencies on LLM providers and MCP servers.
+- Semantic validation using natural-language assertions replaces exact-match checks for varying AI outputs.
+
 Digital transformation used to mean moving your monolith to the cloud or bolting a mobile front end onto a legacy system. Today it means something more disruptive: your application probably contains AI. Not AI helping you build the software, but AI embedded in the product itself – an LLM handling customer queries, an agent calling external services to retrieve data and take action, or a model whose outputs your downstream systems depend on.
 
 That changes testing in ways most organizations haven’t fully reckoned with yet.

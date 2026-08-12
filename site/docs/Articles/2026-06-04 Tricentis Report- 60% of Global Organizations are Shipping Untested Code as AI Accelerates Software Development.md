@@ -11,6 +11,12 @@ type: article
 
 # Tricentis Report: 60% of Global Organizations are Shipping Untested Code as AI Accelerates Software Development
 
+### Key takeaways
+
+- Six in ten organizations report deploying untested code, now knowingly, driven by speed pressure and AI code volume.
+- AI adoption is outpacing quality and governance, with CEOs far more confident than QA and DevOps teams.
+- One in five organizations loses over $1 million annually to poor software quality.
+
 AUSTIN, TX – June 2, 2026 – Tricentis , a global leader in agentic quality engineering, today released the findings of its second annual Quality Transformation Report .
 
 The global survey, which explores the issue of trust in software quality, reveals that while software development teams have accelerated delivery through the wider adoption of AI over the past year, many organizations are struggling to maintain confidence in software quality as increasing scale and complexity introduce new risks into the software development lifecycle (SDLC).

@@ -11,6 +11,13 @@ type: article
 
 # Entries Now Open for the Asia Pacific Software Testing Awards 2026
 
+### Key takeaways
+
+- Entries for the Asia Pacific Software Testing Awards 2026 are now open, closing 12 August 2026.
+- The awards feature 16 categories judged impartially by an expert panel in Bangalore, India.
+- TAPSTA finalists become eligible to compete at the Global Software Testing Awards 2027.
+
+
 Recognising Excellence in Software Testing and Quality Assurance Across the Asia Pacific Region and UAE Bangalore, India – May 2026 The Asia Pacific Software Testing Awards (TAPSTA) is thrilled to announce that entries are now officially open.
 
 Celebrating innovation, expertise, and measurable impact across the software testing and quality assurance community, the Awards represent one of the highest honours in the industry for professionals and organisations throughout the Asia Pacific region and the UAE.

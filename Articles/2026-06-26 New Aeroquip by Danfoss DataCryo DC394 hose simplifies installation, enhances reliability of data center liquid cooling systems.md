@@ -11,6 +11,12 @@ type: article
 
 # New Aeroquip by Danfoss DataCryo DC394 hose simplifies installation, enhances reliability of data center liquid cooling systems
 
+### Key takeaways
+
+- Danfoss launched the Aeroquip DataCryo DC394 channeled hose for data center liquid cooling.
+- Its low bending force, one-to-one bend radius, and kink resistance simplify installation and routing.
+- Sulfur-free, halogen-free, fire-rated construction improves reliability, efficiency, and safety.
+
 NORDBORG, DENMARK — Danfoss Power Solutions today announced the launch of its Aeroquip® by Danfoss DataCryo DC394 hose, a high-performance channeled hose designed specifically for data center liquid cooling systems.
 
 With its exceptional flexibility and robust construction, DC394 hose offers quick, simple installation and reliable, leak-free operation.

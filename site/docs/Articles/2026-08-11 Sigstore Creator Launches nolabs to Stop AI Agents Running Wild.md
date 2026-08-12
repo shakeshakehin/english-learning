@@ -11,6 +11,12 @@ type: article
 
 # Sigstore Creator Launches nolabs to Stop AI Agents Running Wild
 
+### Key takeaways
+
+- nolabs launches nono, an open-source kernel-enforced sandbox for AI agents, MCP and LLM workloads.
+- nono sets hard boundaries on what agents can read, write, delete or contact, with an independent audit trail.
+- Agent Tool Sandboxing gives each tool call scoped authority with phantom credentials, revoked when the call finishes.
+
 Nolabs’ open source tool nono creates a new foundational security layer for AI agents, allowing them to get work done without giving them dangerous levels of access London, UK – 21 st July 2026 – nolabs today launches with a practical answer to a problem security teams are already grappling with today: how do you let agents reason and explore without letting them run wild?
 
 AI agents are increasingly writing code, reading files, calling APIs, using credentials and touching production systems. That access makes them useful, but also risky.

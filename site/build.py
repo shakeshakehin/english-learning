@@ -63,12 +63,23 @@ def build_articles_json():
 
 
 def build_worddb_json():
-    """解析 wordDB.md 表格 -> wordDB.json；也兼容 `- word: 释义` 列表"""
+    """解析 wordDB.md 表格 -> wordDB.json；也兼容 `- word: 释义` 列表。
+    若存在 Languages/cambridge_cache.json（剑桥抓取缓存），用它覆盖释义作为权威来源。"""
     path = os.path.join(LANGUAGES, "wordDB.md")
+    cache_path = os.path.join(LANGUAGES, "cambridge_cache.json")
+    cache = {}
+    if os.path.exists(cache_path):
+        try:
+            cache = json.load(open(cache_path, encoding="utf-8"))
+        except Exception:
+            cache = {}
     if not os.path.exists(path):
-        json.dump([], open(os.path.join(DOCS, "wordDB.json"), "w", encoding="utf-8"))
-        print("wordDB.json: 0 (no wordDB.md)")
-        return []
+        # 即便无 wordDB.md，也尽量用剑桥缓存产出
+        words = [{"word": w, "meaning": v.get("meaning") or v.get("def_en") or ""}
+                 for w, v in cache.items() if v]
+        json.dump(words, open(os.path.join(DOCS, "wordDB.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        print(f"wordDB.json: {len(words)} words (from cambridge cache)")
+        return words
     words = []
     for line in open(path, encoding="utf-8"):
         line = line.strip()
@@ -92,10 +103,26 @@ def build_worddb_json():
     # 去重（保留首个）
     seen = set()
     words = [w for w in words if not (w["word"] in seen or seen.add(w["word"]))]
-    json.dump(words, open(os.path.join(DOCS, "wordDB.json"), "w", encoding="utf-8"),
+    # 剑桥缓存覆盖释义（权威词典级）
+    merged = []
+    covered = set()
+    for w in words:
+        c = cache.get(w["word"])
+        if c and (c.get("meaning") or c.get("def_en")):
+            merged.append({"word": w["word"], "meaning": c.get("meaning") or c.get("def_en") or w["meaning"],
+                           "pos": c.get("pos", ""), "def_en": c.get("def_en", "")})
+            covered.add(w["word"])
+        else:
+            merged.append({"word": w["word"], "meaning": w["meaning"]})
+    # 剑桥缓存里有但 wordDB 没有的词也补进去
+    for w, c in cache.items():
+        if c and (c.get("meaning") or c.get("def_en")) and w not in covered:
+            merged.append({"word": w, "meaning": c.get("meaning") or c.get("def_en") or "",
+                           "pos": c.get("pos", ""), "def_en": c.get("def_en", "")})
+    json.dump(merged, open(os.path.join(DOCS, "wordDB.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
-    print(f"wordDB.json: {len(words)} words")
-    return words
+    print(f"wordDB.json: {len(merged)} words (cambridge covered {len(covered)})")
+    return merged
 
 
 def copy_assets():
@@ -147,9 +174,9 @@ def build_index(articles):
         '    <button id="crawl-copy">复制抓取命令</button>',
         '    <a id="crawl-github" href="https://github.com/shakeshakehin/english-learning/actions/workflows/crawl.yml" target="_blank" rel="noopener">GitHub 手动触发</a>',
         "  </div>",
-        '  <p id="crawl-match">输入关键词可实时筛选文章，并生成抓取命令</p>',
+        '  <p id="crawl-match">输入主题关键词可实时筛选已有文章（上面列表），并生成抓取命令。</p>',
         '  <p class="crawl-cmd">命令：<code id="crawl-cmd">python crawl_and_build.py（默认配置）</code></p>',
-        '  <p class="crawl-hint">抓取方式：① 在本机 vault 目录运行上面的命令（或让我来抓）；② GitHub 手动触发（可选关键词）；③ 每天 06:00 自动按配置抓取。抓取后约 1-2 分钟网页更新。</p>',
+        '  <p class="crawl-hint"><b>说明：</b>本站是纯静态页，浏览器无法直接运行抓取脚本，所以「筛选」用来<br>① 看已有文章里有没有你想要的；② 帮你生成对应的抓取命令。<br>真正抓取需三选一：① 本机 vault 目录运行上面的命令（或让我抓）；② 点「GitHub 手动触发」在 Actions 里填关键词/字数运行；③ 每天 06:00 自动按配置抓取。抓取后约 1-2 分钟网页更新。</p>',
         "</div>",
         "",
         '<div id="article-list"><p>加载中…</p></div>',

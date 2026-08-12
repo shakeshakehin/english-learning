@@ -12,6 +12,12 @@ type: article
 
 # How Automation Is Shaping The Future Of Tech
 
+### Key takeaways
+
+- Automation customizes digitised operations and serves as a driving force behind digital transformation.
+- It enables hyper-personalisation, data-driven decisions, agility, and scalability for organisations.
+- Collaboration, knowledge sharing, and human-centric, ethical design are essential to unlock its value.
+
 In today’s world, automation has emerged as a pivotal function for organisations seeking to streamline their operations and achieve strategic objectives. Beyond being a mere tool for efficiency, automation is a catalyst for profound transformation.
 
 Automation, at its core, is the application of technology to perform tasks traditionally done by humans. However, its significance extends far beyond task replacement. It is the customisation of computerised, digitised operations to suit specific contexts and needs. This perspective positions automation as a driving force behind digital transformation.

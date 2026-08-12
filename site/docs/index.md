@@ -18,9 +18,9 @@
     <button id="crawl-copy">复制抓取命令</button>
     <a id="crawl-github" href="https://github.com/shakeshakehin/english-learning/actions/workflows/crawl.yml" target="_blank" rel="noopener">GitHub 手动触发</a>
   </div>
-  <p id="crawl-match">输入关键词可实时筛选文章，并生成抓取命令</p>
+  <p id="crawl-match">输入主题关键词可实时筛选已有文章（上面列表），并生成抓取命令。</p>
   <p class="crawl-cmd">命令：<code id="crawl-cmd">python crawl_and_build.py（默认配置）</code></p>
-  <p class="crawl-hint">抓取方式：① 在本机 vault 目录运行上面的命令（或让我来抓）；② GitHub 手动触发（可选关键词）；③ 每天 06:00 自动按配置抓取。抓取后约 1-2 分钟网页更新。</p>
+  <p class="crawl-hint"><b>说明：</b>本站是纯静态页，浏览器无法直接运行抓取脚本，所以「筛选」用来<br>① 看已有文章里有没有你想要的；② 帮你生成对应的抓取命令。<br>真正抓取需三选一：① 本机 vault 目录运行上面的命令（或让我抓）；② 点「GitHub 手动触发」在 Actions 里填关键词/字数运行；③ 每天 06:00 自动按配置抓取。抓取后约 1-2 分钟网页更新。</p>
 </div>
 
 <div id="article-list"><p>加载中…</p></div>

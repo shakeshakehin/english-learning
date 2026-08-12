@@ -11,6 +11,12 @@ type: article
 
 # What is “Strong” Coffee? It May Depend on Cultural Context
 
+### Key takeaways
+
+- A Brazilian qualitative study finds "strong coffee" carries layered, often contradictory cultural meanings.
+- Consumers most consistently associate strength with bitterness, dark color, roasted aroma and body.
+- Specialty's technical notion of strength does not line up with everyday consumer vocabulary and perception.
+
 When consumers say they want a “strong” coffee, they may be referring to any number of qualities — bitterness, dark color, roasted aroma or caffeine-linked stimulation — within a broader cultural context, according to new research from a team in Brazil.
 
 Published in May in the Journal of Sensory Studies, the qualitative study drew on 35 in-depth interviews with Brazilian coffee consumers in Campinas and Recife. It found that the phrase strong coffee, or “café forte,” carries layered and often contradictory meanings.

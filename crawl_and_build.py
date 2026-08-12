@@ -120,21 +120,58 @@ def clean_content(raw_html):
     return "\n\n".join(merged)
 
 
+def summarize_takeaways(title, body):
+    """抽取式 Key takeaways：从正文按"含高频词/含数字/句首"选出 2-3 句精简要点。
+    非 LLM 兜底（GitHub Actions 无模型），质量有限；本地可人工/LLM 精修。"""
+    import collections
+    paras = [b.strip() for b in body.split("\n\n") if b.strip() and not b.startswith(("#", "-", ">"))]
+    if not paras:
+        return ["（自动摘要失败，请人工补充）"]
+    text = " ".join(paras)
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    sentences = [s.strip() for s in sentences if len(s.split()) >= 6 and len(s.split()) <= 45]
+    if not sentences:
+        return [paras[0][:200]]
+    # 词频统计（去掉停用词后的内容词）
+    stop = set(("the","a","an","and","or","but","of","to","in","on","for","with","as","is","are","was","were","it","its","this","that","these","those","from","by","at","be","been","being","will","would","can","could","may","might","their","they","we","you","he","she","his","her","not","no","has","have","had","which","who","whom","about","into","than","also","more","most","new"))
+    freq = collections.Counter()
+    for w in re.findall(r"[A-Za-z][A-Za-z'\-]*", text.lower()):
+        if w not in stop and len(w) > 3:
+            freq[w] += 1
+    def score(s):
+        words = [w.lower() for w in re.findall(r"[A-Za-z][A-Za-z'\-]*", s) if w.lower() not in stop]
+        return sum(freq[w] for w in words) / max(1, len(words))
+    ranked = sorted(sentences, key=score, reverse=True)
+    picks = ranked[:2]
+    # 至少一条来自文章开头（更接近主题句）
+    if sentences and sentences[0] not in picks:
+        picks.append(sentences[0])
+    return list(dict.fromkeys(picks))
+
+
 def main():
     cfg = load_config()
     # 命令行关键词覆盖（--keyword pour over,brew）——对所有源生效
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--keyword", help="抓取关键词（逗号分隔），覆盖各源配置 topics")
-    ap.add_argument("--min-words", type=int, help="覆盖最小字数")
-    ap.add_argument("--max-words", type=int, help="覆盖最大字数")
+    ap.add_argument("--min-words", type=str, help="覆盖最小字数（空串按默认）")
+    ap.add_argument("--max-words", type=str, help="覆盖最大字数（空串按默认）")
     ap.add_argument("--no-push", action="store_true", help="抓取+构建但不 git push（仅本地预览）")
     args = ap.parse_args()
     kw_override = None
     if args.keyword:
         kw_override = [k.strip() for k in args.keyword.split(",") if k.strip()]
-    min_words = args.min_words if args.min_words is not None else cfg.get("min_words", 250)
-    max_words = args.max_words if args.max_words is not None else cfg.get("max_words", 5000)
+    # GitHub Actions 可能传入空字符串（--min-words ""），此时按默认处理
+    def _words(v, default):
+        if v is None or str(v).strip() == "":
+            return default
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return default
+    min_words = _words(args.min_words, cfg.get("min_words", 250))
+    max_words = _words(args.max_words, cfg.get("max_words", 5000))
     existing_slugs = set()
     existing_names = set()
     for fn in os.listdir(ARTICLES):
@@ -214,8 +251,12 @@ def main():
                 f'url: "{p["link"]}"\npublished: {p["date"]}\n'
                 f'added: {datetime.date.today().isoformat()}\n'
                 f'category: "{category}"\ntags: {json.dumps(tags, ensure_ascii=False)}\n'
-                f'type: article\n---\n\n# {p["title"]}\n\n{body}\n'
+                f'type: article\n---\n\n# {p["title"]}\n\n'
             )
+            # Key takeaways：抓取后自动生成精简概括，写入正文开头
+            tak = summarize_takeaways(p["title"], body)
+            front += "### Key takeaways\n\n" + "\n\n".join("- " + t for t in tak) + "\n\n"
+            front += body + "\n"
             open(os.path.join(ARTICLES, fn), "w", encoding="utf-8").write(front)
             existing_slugs.add(slug)
             existing_names.add(fn[:-3].lower())

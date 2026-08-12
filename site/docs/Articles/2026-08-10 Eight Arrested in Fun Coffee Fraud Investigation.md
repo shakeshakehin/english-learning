@@ -11,6 +11,12 @@ type: article
 
 # Eight Arrested in Fun Coffee Fraud Investigation
 
+### Key takeaways
+
+- Fun Coffee, a purported Vietnam-based coffee investment brand, sits at the center of a cross-border crypto fraud probe.
+- Hong Kong police describe a Ponzi-style scheme paying earlier investors with later deposits and no real profits.
+- Eight arrests followed; combined registered losses total about US$12.4 million across Hong Kong and Macao.
+
 An image circulated by the Hong Kong Securities and Futures Commission in July.
 
 A purported Vietnam-based company that marketed itself as a health-conscious coffee investment brand is at the center of a cross-border cryptocurrency fraud investigation.

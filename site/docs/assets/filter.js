@@ -133,7 +133,14 @@
     Object.keys(groups).sort().reverse().forEach(function (ym) {
       var head = document.createElement("div");
       head.className = "date-group";
-      head.textContent = ym + "（" + groups[ym].length + " 篇）";
+      head.innerHTML = "<span class=\"dg-arrow\">▾</span> " + ym + "（" + groups[ym].length + " 篇）";
+      var wrap = document.createElement("div");
+      wrap.className = "date-group-body";
+      head.addEventListener("click", function () {
+        head.classList.toggle("collapsed");
+        wrap.classList.toggle("hidden");
+        head.querySelector(".dg-arrow").textContent = head.classList.contains("collapsed") ? "▸" : "▾";
+      });
       listEl.appendChild(head);
       groups[ym].forEach(function (a) {
         var card = document.createElement("a");
@@ -147,8 +154,9 @@
         ].filter(Boolean).join("");
         card.innerHTML = '<div class="ac-title"></div><div class="ac-meta">' + meta + "</div>";
         card.querySelector(".ac-title").textContent = a.title;
-        listEl.appendChild(card);
+        wrap.appendChild(card);
       });
+      listEl.appendChild(wrap);
     });
   }
 

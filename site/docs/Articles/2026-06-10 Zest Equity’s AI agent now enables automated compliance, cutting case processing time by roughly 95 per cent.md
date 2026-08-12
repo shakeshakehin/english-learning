@@ -11,6 +11,12 @@ type: article
 
 # Zest Equity’s AI agent now enables automated compliance, cutting case processing time by roughly 95 per cent
 
+### Key takeaways
+
+- Zest Equity's Tarth AI agent automates customer onboarding compliance end to end.
+- It cut onboarding from about 60 minutes to a median of three minutes, saving over 800 hours.
+- Every decision is cited and evidenced through an audit trail, with data processed in-house.
+
 ABU DHABI, 09 June 2026- Zest Equity, a digital transactional infrastructure company powering private-market transactions, today announced that its proprietary AI-powered compliance system, Tarth, is now powering the firm’s customer onboarding work end to end, from document analysis through to a recommendation ready for compliance review.
 
 The system has been developed in-house at Zest. Critically, this means that client documents and personal data are processed and stored entirely within Zest’s own infrastructure.

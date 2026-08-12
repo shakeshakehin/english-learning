@@ -11,6 +11,12 @@ type: article
 
 # Build-Outs Of Coffee: Milk Brew In Pasadena, CA
 
+### Key takeaways
+
+- Milk Brew is a new Pasadena cafe specializing in coffee steeped directly in milk.
+- The technique yields a creamier, more balanced latte-like drink without water from espresso.
+- The shop uses Black & White Coffee Roasters and Weber EG-1 grinders; grand opening was August 1.
+
 In the city of Los Angeles and its environs, there’s one question a traveler will find themselves asked again and again: What part of town are you staying in? Where are you located?
 
 Driving across the city can make for an all-day affair, especially if your timing doesn’t account for traffic congestion.

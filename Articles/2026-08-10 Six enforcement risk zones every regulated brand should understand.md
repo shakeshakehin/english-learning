@@ -11,6 +11,12 @@ type: article
 
 # Six enforcement risk zones every regulated brand should understand
 
+### Key takeaways
+
+- Enforcement targets visible brands and easy wins, not just technically non-compliant products.
+- Six risk zones multiply exposure: storefront visibility, prior enforcement, markets served, cross-border sales, missing RP/AR, and SKU count.
+- More stockists, markets and SKUs mean more points of failure; growth without structure equals unlimited risk.
+
 Author: Lee Bryan, author of The Compliance Edge and founder and CEO of Arcus Compliance Enforcement doesn’t happen by accident. It’s not random, unlucky or even strictly about whether your product is technically compliant.
 
 It happens because you showed up on the radar. That radar is always on, always scanning and watching. Hunting for easy wins, big headlines and brands that make regulators look effective.

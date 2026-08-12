@@ -11,6 +11,13 @@ type: article
 
 # In conversation with the VP of Global Platform Engineering, Data & Personalsation at NBCUniversal
 
+### Key takeaways
+
+- NBCUniversal VP Manoj Yerrasani judges entries on distinctive, well-executed, clearly impactful work.
+- Strong entries show real business problems solved with measurable outcomes, not just technology built.
+- Applicants should lead with hard metrics and compelling storytelling, avoiding technology in a vacuum.
+
+
 In conversation with Manoj Yerrasani, VP of Global Platform Engineering, Data & Personalisation at NBCUniversal This interview is conducted in collaboration with the Digital Transformation Awards The awards will be held on 14 th of October in London, United Kingdom.
 
 When it comes to building AI and data platforms that operate at genuine global scale, few voices carry more weight than Manoj Yerrasani.

@@ -11,6 +11,12 @@ type: article
 
 # 95% of CISOs Pressured to Suppress or Delay Compliance-Related Security Issues, Even as AI-Generated Code Multiplies Their Attack Surface
 
+### Key takeaways
+
+- 95% of CISOs feel pressure to suppress or delay compliance-related security issues to meet business deadlines.
+- Only 18% of developers apply security continuously as they write code, despite widespread AI tooling.
+- Firms shipping mostly AI-generated code are nearly three times more likely to ship known vulnerabilities.
+
 Checkmarx’s annual Future of Application Security report reveals security awareness is at an all-time high, execution is not, and AI is widening the gap Paramus, NJ – June 8, 2026 — Nearly all developers write code with AI, but fewer than one in five secure it as they go, citing limited use of in-IDE (Integrated Developer Environments) AppSec tooling and difficulty integrating security into existing CI/CD pipelines.
 
 Their CISOs face the same demands from the executive floor: 95% feel pressure to suppress or delay compliance-related security issues when business deadlines are at stake.

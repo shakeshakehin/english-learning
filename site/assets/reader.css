@@ -261,11 +261,65 @@ body.focus-on .rw.vocab {
   font-size: 13px;
   font-weight: 600;
   color: inherit;
-  opacity: 0.75;
+  opacity: 0.8;
   margin: 18px 0 4px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+.date-group .dg-arrow { display: inline-block; width: 12px; }
+.date-group-body.hidden { display: none; }
+
+/* ===== 生词表页 ===== */
+#vocab-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+#vocab-toolbar button {
+  font-size: 13px; padding: 5px 10px;
+  border: 1px solid rgba(0,0,0,0.22); border-radius: 8px;
+  background: transparent; cursor: pointer;
+}
+.vocab-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 8px 0;
+}
+.vocab-card .vc-top { display: flex; align-items: baseline; gap: 10px; }
+.vocab-card strong { font-size: 17px; }
+.vocab-card .vc-m { color: #b8860b; }
+.vocab-card .vc-s { margin-top: 4px; font-size: 13px; opacity: 0.8; }
+.vocab-card .vc-a { margin-top: 2px; font-size: 12px; opacity: 0.55; }
+.vocab-day.hidden { display: none; }
+.vocab-synced-tbl { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.vocab-synced-tbl th, .vocab-synced-tbl td {
+  border: 1px solid rgba(0,0,0,0.12); padding: 6px 8px; text-align: left; font-size: 13px;
+}
+.vocab-synced-tbl th { background: rgba(0,0,0,0.05); }
+
+/* ===== 生词管理弹窗 ===== */
+#lexi-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; display: flex; align-items: center; justify-content: center; }
+#lexi-modal[hidden] { display: none; }
+.lm-box {
+  background: var(--md-default-bg-color, #fff);
+  color: var(--md-default-fg-color, #333);
+  border-radius: 12px; padding: 18px; max-width: 560px; width: 90%; max-height: 80vh; overflow: auto;
+}
+.lm-list { max-height: 40vh; overflow: auto; margin: 10px 0; }
+.lm-row { display: grid; grid-template-columns: 90px 1fr; gap: 2px 10px; padding: 6px 4px; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 13px; }
+.lm-row strong { grid-row: 1 / span 2; font-size: 15px; }
+.lm-row .lm-s { grid-column: 2; opacity: 0.75; font-size: 12px; }
+.lm-row .lm-d { grid-column: 2; font-size: 11px; opacity: 0.5; }
+.lm-btns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.lm-btns button { font-size: 13px; padding: 5px 10px; border: 1px solid rgba(0,0,0,0.22); border-radius: 8px; background: transparent; cursor: pointer; }
 
 /* ===== 首页：文章卡片 ===== */
 .article-card {

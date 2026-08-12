@@ -300,6 +300,18 @@
     if (nextBtn) nextBtn.addEventListener("click", function () { gotoPart(1); });
 
     /* ---- 生词按钮：点击直接标记当前聚焦词 ---- */
+    function currentSentence() {
+      /* 取当前聚焦词所在句子的完整文本 */
+      var el = currentEl || findCenterWord();
+      if (!el || !el.dataset.sid) return "";
+      var s = el.dataset.sid;
+      var parts = partTokens().filter(function (t) { return t.dataset.sid === s; });
+      return parts.map(function (t) { return t.textContent; }).join("").trim();
+    }
+    function articleTitle() {
+      var h = document.querySelector("h1");
+      return h ? h.textContent.trim() : (document.title || "");
+    }
     function markCurrentWord() {
       var el = currentEl || findCenterWord();
       if (!el) { toast("未定位到当前词"); return; }
@@ -311,7 +323,13 @@
       lookup(word).then(function (zh) {
         var local2 = loadLocalVocab();
         if (local2[word]) { toast("「" + word + "」已在生词表"); return; }
-        local2[word] = { meaning: zh || "待补充", ts: Date.now() };
+        local2[word] = {
+          meaning: zh || "待补充",
+          ts: Date.now(),
+          sentence: currentSentence(),   /* 来源原句 */
+          article: articleTitle(),       /* 来源文章标题 */
+          date: new Date().toISOString().slice(0, 10), /* 标记日期 YYYY-MM-DD */
+        };
         saveLocalVocab(local2);
         var n = highlightWordInPage(word);
         toast("✓ 已标记「" + word + "」" + (zh ? "：" + zh : "") + (n ? "（高亮" + n + "处）" : ""));
@@ -336,21 +354,25 @@
       f.style.left = left + "px";
       f.style.top = top + "px";
       clearTimeout(f._t);
-      f._t = setTimeout(function () { f.remove(); }, 6000);
+      f._t = setTimeout(function () { f.remove(); }, 8000);
     }
     document.addEventListener("mouseup", function (e) {
       var sel = window.getSelection();
       if (!sel || sel.isCollapsed) return;
       var text = sel.toString().trim();
       if (!text) return;
-      var m = text.match(/[A-Za-z][A-Za-z'\-]*/);
-      if (!m) return;
+      if (!/[A-Za-z]/.test(text)) return;
       var t = e.target;
       if (t && t.closest && t.closest("#reader-controls, #lexi-float")) return;
-      var q = m[0].toLowerCase();
-      var meaning = ((loadLocalVocab())[q] || {}).meaning || "";
-      if (meaning) { showFloat(e.clientX, e.clientY, q, meaning); return; }
-      /* 未标记 → 查翻译 */
+      /* 选中内容：优先看是否整段/整句，而非只取首个词。
+         若整个选中文本本身就是一个已标记生词 → 直接用本地释义；
+         否则整段交给翻译接口（支持短语/句子/多句）。 */
+      var single = /^[A-Za-z][A-Za-z'\-]*$/.test(text);
+      var q = single ? text.toLowerCase() : text;
+      if (single) {
+        var meaning = ((loadLocalVocab())[q] || {}).meaning || "";
+        if (meaning) { showFloat(e.clientX, e.clientY, q, meaning); return; }
+      }
       lookup(q).then(function (zh) { showFloat(e.clientX, e.clientY, q, zh); });
     });
 
@@ -371,25 +393,43 @@
     modal.hidden = true;
     modal.innerHTML =
       '<div class="lm-box">' +
-      "<h4>本机已标记生词（<span id=\"lm-count\">0</span>）</h4>" +
-      '<p class="lm-hint">把下面的表格行复制到本地 Obsidian 的 <code>Languages/wordDB.md</code>（释义可修改），' +
-      "然后本地运行 <code>deploy.sh</code> 全站同步生效。点「生词」按钮或框选单词即可快速标记。</p>" +
-      '<textarea id="lm-rows" readonly rows="6" spellcheck="false"></textarea>' +
-      '<div class="lm-btns"><button id="lm-copy">复制表格行</button>' +
+      "<h4>本机已标记生词（<span id=\\\"lm-count\\\">0</span>）</h4>" +
+      '<p class="lm-hint">点「生词」按钮或框选单词即可标记（自动记录来源原句与日期）。' +
+      "本机标记仅存当前浏览器；要把生词同步到全站，请把下方表格复制到本地 <code>Languages/wordDB.md</code> 后运行 <code>deploy.sh</code>。</p>" +
+      '<div class="lm-list" id="lm-list"></div>' +
+      '<div class="lm-btns"><button id="lm-copy">复制表格行（含来源）</button>' +
       '<button id="lm-clear">清空本机标记</button>' +
       '<button id="lm-close">关闭</button></div>' +
       "</div>";
     document.body.appendChild(modal);
 
+    function entryToRow(w, e) {
+      /* 生词 | 释义 | 来源原句 | 日期 */
+      var sent = (e.sentence || "").replace(/\|/g, "｜").slice(0, 140);
+      return "| " + w + " | " + (e.meaning || "待补充") + " | " + sent + " | " + (e.date || "") + " |";
+    }
     function rowsText() {
       var local = loadLocalVocab();
       return Object.keys(local).sort()
-        .map(function (w) { return "| " + w + " | " + (local[w].meaning || "待补充") + " |"; })
+        .map(function (w) { return entryToRow(w, local[w]); })
         .join("\n");
     }
     function refresh() {
-      document.getElementById("lm-count").textContent = Object.keys(loadLocalVocab()).length;
-      document.getElementById("lm-rows").value = rowsText();
+      var local = loadLocalVocab();
+      document.getElementById("lm-count").textContent = Object.keys(local).length;
+      var list = document.getElementById("lm-list");
+      list.innerHTML = "";
+      Object.keys(local).sort().forEach(function (w) {
+        var e = local[w];
+        var row = document.createElement("div");
+        row.className = "lm-row";
+        row.innerHTML = "<strong></strong><span class=\"lm-m\"></span><span class=\"lm-s\"></span><span class=\"lm-d\"></span>";
+        row.querySelector("strong").textContent = w;
+        row.querySelector(".lm-m").textContent = e.meaning || "";
+        row.querySelector(".lm-s").textContent = e.sentence || "";
+        row.querySelector(".lm-d").textContent = e.date || "";
+        list.appendChild(row);
+      });
     }
     document.getElementById("lm-copy").addEventListener("click", function () {
       var txt = rowsText();
@@ -397,9 +437,12 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(txt).then(function () { toast("已复制到剪贴板"); });
       } else {
-        var ta = document.getElementById("lm-rows");
+        var ta = document.createElement("textarea");
+        ta.value = txt;
+        document.body.appendChild(ta);
         ta.select();
         document.execCommand("copy");
+        ta.remove();
         toast("已复制到剪贴板");
       }
     });

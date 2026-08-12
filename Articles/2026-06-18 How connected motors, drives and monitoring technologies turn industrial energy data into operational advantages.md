@@ -11,6 +11,12 @@ type: article
 
 # How connected motors, drives and monitoring technologies turn industrial energy data into operational advantages
 
+### Key takeaways
+
+- Combining industrial energy data with asset-performance monitoring creates real operational advantages.
+- Electric motor systems account for about 60% of global industrial electricity consumption.
+- Continuous monitoring helps prevent costly unplanned downtime, which costs industry billions annually.
+
 Energy data brings a genuine competitive edge The industrial sector accounted for nearly 40 per cent of global final energy consumption in 2024, according to the International Energy Agency (IEA)’s Energy Efficiency 2025 report, the largest share of any end user sector.
 
 Industrial operators must therefore reduce energy consumption without compromising productivity. One answer lies in better use of data.

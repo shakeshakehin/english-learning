@@ -11,6 +11,12 @@ type: article
 
 # BridgeWise’s Context Analytics Launches First-of-Its-Kind Podcast Sentiment Analysis and Scoring for Investors
 
+### Key takeaways
+
+- Context Analytics launched the first quantitative-grade podcast sentiment analysis feed for institutional investors.
+- Audio transcripts are run through its NLP pipeline and entity-tagged at company and ticker level.
+- Backtesting shows roughly a 10% return spread between the most positively and negatively discussed companies.
+
 In its first product launch since being acquired by wealth AI leader BridgeWise in February, Context Analytics now enables institutional investors to quantify market sentiment in podcasts using ticker-mapped, finance-tuned scores.
 
 CHICAGO, IL — Context Analytics, a BridgeWise company, today launched its Podcast Sentiment Analysis Feed, the first quantitative-grade sentiment analysis product built from financial and business podcast content.

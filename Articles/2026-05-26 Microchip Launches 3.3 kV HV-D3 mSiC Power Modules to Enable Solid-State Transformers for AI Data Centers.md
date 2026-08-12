@@ -11,6 +11,13 @@ type: article
 
 # Microchip Launches 3.3 kV HV‑D3 mSiC® Power Modules to Enable Solid-State Transformers for AI Data Centers
 
+### Key takeaways
+
+- Microchip launched 3.3 kV mSiC power modules enabling solid-state transformers for AI data centers.
+- SSTs reduce conversion stages and deliver regulated DC from the medium-voltage grid to server racks.
+- Modules offer 6 kV isolation, high thermal conductivity, and balanced switching losses.
+
+
 3 kV HV ‑ D3 mSiC ® Power Modules , designed to simplify and accelerate the adoption of solid-state transformers (SSTs) in AI hyperscale data centers and other high‑voltage power applications.
 
 3 kV silicon carbide (SiC) mSiC ® MOSFETs and Schottky diodes in an industry‑standard 62 mm package, enabling efficient power delivery from the medium‑voltage grid directly to the server rack.

@@ -11,6 +11,13 @@ type: article
 
 # LaunchDarkly Brings Runtime Control to the Agent Era
 
+### Key takeaways
+
+- LaunchDarkly launched AgentControl for real-time control of AI agents in production without redeployment.
+- It combines runtime intervention, quality benchmarking, guarded rollouts, and trace-level observability.
+- Configuration changes propagate in under 200ms, fast enough to intervene within a conversation turn.
+
+
 New solution gives engineering teams instantaneous control over AI agent behaviour in production without redeployment.
 
 London, UK, May 19, 2026 – LaunchDarkly, the runtime control platform, today launched AgentControl, a new solution that gives software teams real-time control over AI agents in production.

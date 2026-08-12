@@ -9,6 +9,14 @@ on:
         description: "抓取关键词（逗号分隔，可留空用默认配置）"
         required: false
         type: string
+      min_words:
+        description: "最少字数（可留空用默认 250）"
+        required: false
+        type: string
+      max_words:
+        description: "最多字数（可留空用默认 5000）"
+        required: false
+        type: string
 permissions:
   contents: write
 jobs:
@@ -24,4 +32,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: python crawl_and_build.py --keyword "${{ github.event.inputs.keyword }}"
+        run: python crawl_and_build.py --keyword "${{ github.event.inputs.keyword }}" --min-words "${{ github.event.inputs.min_words }}" --max-words "${{ github.event.inputs.max_words }}"

@@ -11,6 +11,12 @@ type: article
 
 # NTT DATA Named Headline Partner of The European Software Testing Awards 2026
 
+### Key takeaways
+
+- NTT DATA, a $30+ billion global services leader, is named Headline Partner of TESTA 2026.
+- The awards span 18 categories for UK and European entrants, with the ceremony held in London.
+- Entries are judged anonymously on merit by senior industry professionals; submissions are now open.
+
 Test Associates is proud to announce NTT DATA , a $30+ billion global leader in business and technology services, as the Headline Partner of The European Software Testing Awards (TESTA) 2026 .
 
 For over 12 years, TESTA has celebrated innovation, expertise, and impact across Europe’s software testing and quality engineering community.

@@ -11,6 +11,12 @@ type: article
 
 # The Unanswerable Test Suite: How to Test AI Systems That Sound Right When They Are Wrong
 
+### Key takeaways
+
+- A 237-page AI-drafted consulting report with fabricated references showed AI failures slip past review gates built for human mistakes.
+- Hallucination defeats same-input/same-output testing because the system fails by succeeding fluently and nondeterministically.
+- Teams should build an "unanswerable suite" of absent-fact, false-premise and boundary questions, and assert claims against source documents.
+
 Author: Sumit G, Head of Technology & Digital Innovation In October 2025, one of the world’s largest consulting firms agreed to repay part of a contract worth close to 440,000 Australian dollars.
 
 The report it had delivered to Australia’s Department of Employment and Workplace Relations ran to 237 pages and read exactly the way a report at that price should read: confident, structured, thoroughly referenced.
