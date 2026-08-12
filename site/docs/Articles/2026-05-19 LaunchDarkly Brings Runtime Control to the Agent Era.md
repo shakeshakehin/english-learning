@@ -11,4 +11,40 @@ type: article
 
 # LaunchDarkly Brings Runtime Control to the Agent Era
 
-New solution gives engineering teams instantaneous control over AI agent behaviour in production without redeployment. London, UK, May 19, 2026 – LaunchDarkly, the runtime control platform, today launched AgentControl, a new solution that gives software teams real-time control over AI agents in production. With AgentControl, teams can substantially change how an agent behaves at runtime without redeploying the underlying application. It marks a significant expansion of the company’s core platform into the AI era. As AI agents move into production, engineering teams need new ways to manage configuration, quality, and runtime behaviour. Unlike traditional code, agent behaviour may vary across models, prompts, and production contexts, even when application code remains unchanged. Once deployed, agent configurations can span teams and frameworks, creating a need for shared standards around governance, versioning, and release controls. Teams also need the ability to intervene quickly when production conditions change. AgentControl was built to close that gap. Unlike platforms that offer visibility or lifecycle tooling in isolation, AgentControl is the first to combine instantaneous runtime intervention with the full operational layer teams need to run agents reliably: configuring agent behaviour across every team and framework, benchmarking quality before changes reach live traffic, releasing more safely with progressive exposure and guarded rollouts, observing performance with full trace-level visibility, and iterating based on what production data actually shows — all without a redeployment cycle. That kind of control requires a different order of speed. With LaunchDarkly, configuration changes propagate in under 200 milliseconds, fast enough to change how an agent behaves, route to a different model, or trigger a fallback within the turn of a conversation, before a customer sees a bad response. “LaunchDarkly has always been about giving software teams control at runtime over what their software does in production,” said Cameron Etezadi, CTO of LaunchDarkly. “The hardest problems in AI, like model drift, unpredictable outputs, and the inability to intervene fast enough, turn out to be exactly the problems our platform was built to solve. We didn’t have to reinvent the platform; we just had to extend it to meet the demands of an AI SDLC and agentic-driven workflows.” “Cursor is how the world’s leading enterprises are building with AI. As more AI-powered products and agentic capabilities reach production, runtime control becomes essential infrastructure alongside the development workflows and controls teams already trust,” said Brian McCarthy, President, Global Revenue and Field Operations at Cursor. “LaunchDarkly built an additional layer for that environment, and AgentControl extends it to the agent lifecycle in a way that complements how Cursor’s customers already build.” As development moves toward a world where agents write, deploy, and iterate on code at machine speed, the organisations that win will be the ones that never lost their grip on what was running in production. AgentControl gives every team the foundation to get there. About LaunchDarkly LaunchDarkly is the runtime control layer for the AI era of software development. As AI accelerates the volume and pace of change hitting production, LaunchDarkly gives development teams the infrastructure to move fast without losing control of what they’re building — controlling code, controlling agents, and acting instantly when something goes wrong. LaunchDarkly is the foundation that lets teams embrace the velocity AI makes possible without fearing what they can’t contain. Trusted by thousands of customers worldwide, including a quarter of the Fortune 500, LaunchDarkly is headquartered in Oakland, California. Learn more at launchdarkly.com.
+New solution gives engineering teams instantaneous control over AI agent behaviour in production without redeployment.
+
+London, UK, May 19, 2026 – LaunchDarkly, the runtime control platform, today launched AgentControl, a new solution that gives software teams real-time control over AI agents in production.
+
+With AgentControl, teams can substantially change how an agent behaves at runtime without redeploying the underlying application. It marks a significant expansion of the company’s core platform into the AI era.
+
+As AI agents move into production, engineering teams need new ways to manage configuration, quality, and runtime behaviour.
+
+Unlike traditional code, agent behaviour may vary across models, prompts, and production contexts, even when application code remains unchanged.
+
+Once deployed, agent configurations can span teams and frameworks, creating a need for shared standards around governance, versioning, and release controls.
+
+Teams also need the ability to intervene quickly when production conditions change. AgentControl was built to close that gap.
+
+Unlike platforms that offer visibility or lifecycle tooling in isolation, AgentControl is the first to combine instantaneous runtime intervention with the full operational layer teams need to run agents reliably: configuring agent behaviour across every team and framework, benchmarking quality before changes reach live traffic, releasing more safely with progressive exposure and guarded rollouts, observing performance with full trace-level visibility, and iterating based on what production data actually shows — all without a redeployment cycle.
+
+That kind of control requires a different order of speed.
+
+With LaunchDarkly, configuration changes propagate in under 200 milliseconds, fast enough to change how an agent behaves, route to a different model, or trigger a fallback within the turn of a conversation, before a customer sees a bad response.
+
+“LaunchDarkly has always been about giving software teams control at runtime over what their software does in production,” said Cameron Etezadi, CTO of LaunchDarkly.
+
+“The hardest problems in AI, like model drift, unpredictable outputs, and the inability to intervene fast enough, turn out to be exactly the problems our platform was built to solve.
+
+” “Cursor is how the world’s leading enterprises are building with AI.
+
+As more AI-powered products and agentic capabilities reach production, runtime control becomes essential infrastructure alongside the development workflows and controls teams already trust,” said Brian McCarthy, President, Global Revenue and Field Operations at Cursor.
+
+” As development moves toward a world where agents write, deploy, and iterate on code at machine speed, the organisations that win will be the ones that never lost their grip on what was running in production.
+
+AgentControl gives every team the foundation to get there. About LaunchDarkly LaunchDarkly is the runtime control layer for the AI era of software development.
+
+As AI accelerates the volume and pace of change hitting production, LaunchDarkly gives development teams the infrastructure to move fast without losing control of what they’re building — controlling code, controlling agents, and acting instantly when something goes wrong.
+
+LaunchDarkly is the foundation that lets teams embrace the velocity AI makes possible without fearing what they can’t contain.
+
+Trusted by thousands of customers worldwide, including a quarter of the Fortune 500, LaunchDarkly is headquartered in Oakland, California. com.

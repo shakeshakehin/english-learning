@@ -51,6 +51,32 @@ body.focus-on .rw.vocab {
   font-family: var(--md-text-font, inherit);
   cursor: ns-resize;
 }
+/* 分部分：当前部分外的词隐藏 */
+.rw.part-hidden {
+  display: none;
+}
+#rw-prev,
+#rw-next {
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  line-height: 1.2;
+}
+#rw-prev:hover,
+#rw-next:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+#rw-part {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 11px;
+  opacity: 0.7;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
 #rw-pos {
   writing-mode: vertical-rl;
   text-orientation: mixed;
@@ -230,6 +256,17 @@ body.focus-on .rw.vocab {
   background: rgba(0, 0, 0, 0.06);
 }
 
+/* ===== 首页：日期分组 ===== */
+.date-group {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+  opacity: 0.75;
+  margin: 18px 0 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 /* ===== 首页：文章卡片 ===== */
 .article-card {
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -326,4 +363,28 @@ body.focus-on .rw.vocab {
   margin: 6px 0 0;
   font-size: 12px;
   opacity: 0.6;
+}
+
+/* ===== 框选翻译浮层 ===== */
+#lexi-float {
+  position: fixed;
+  z-index: 250;
+  max-width: 320px;
+  background: rgba(30, 30, 30, 0.95);
+  color: #fff;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+#lexi-float strong {
+  display: block;
+  color: #ffd54f;
+  font-size: 14px;
+  margin-bottom: 3px;
+  word-break: break-all;
+}
+#lexi-float span {
+  word-break: break-all;
 }

@@ -13,6 +13,21 @@
       }
     },
     {
+      "url": "https://www.softwaretestinghelp.com",
+      "label": "Software Testing Help",
+      "topics": [],
+      "categories": {
+        "ai": "AI / QA",
+        "automation": "Automation",
+        "security": "Security",
+        "testing": "QA",
+        "api": "QA",
+        "selenium": "Automation",
+        "cypress": "Automation",
+        "performance": "QA"
+      }
+    },
+    {
       "url": "https://perfectdailygrind.com",
       "label": "Perfect Daily Grind",
       "topics": ["pour over", "pour-over", "v60", "chemex", "hand brewing", "filter coffee", "drip coffee"],
@@ -23,9 +38,22 @@
       "label": "Sprudge",
       "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee"],
       "category": "Coffee"
+    },
+    {
+      "url": "https://dailycoffeenews.com",
+      "label": "Daily Coffee News",
+      "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee", "brewing"],
+      "category": "Coffee"
+    },
+    {
+      "url": "https://www.baristamagazine.com",
+      "label": "Barista Magazine",
+      "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee", "brewing", "manual brew"],
+      "category": "Coffee"
     }
   ],
   "min_words": 250,
   "max_words": 5000,
-  "max_per_run": 3
+  "max_per_run": 3,
+  "crawl_delay": 3
 }

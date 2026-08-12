@@ -11,4 +11,38 @@ type: article
 
 # Parasoft Eliminates Dependency Bottlenecks With MCP-Powered, AI-Driven API Mocking
 
-MONROVIA, Calif. – May 19, 2026 – Parasoft, a global leader in automated software testing solutions, today announced autonomous API mocking for enterprise service virtualization via the Model Context Protocol (MCP)—eliminating dependency bottlenecks. The new Virtualize MCP server extends Parasoft’s AI-driven API mocking and service virtualization capabilities to external LLM clients and AI agents, enabling autonomous generation, deployment, and management of REST API mocks beyond the Virtualize UI and bringing agentic workflows directly into build pipelines. With these innovations, Parasoft Virtualize —an award-winning service virtualization solution for microservices and distributed architectures—now enables lightweight, AI-accelerated, developer-centric workflows for modern software delivery. Built for the Future of AI-Native Software Delivery Development teams increasingly rely on AI-enhanced IDEs and LLM-powered tools such as GitHub Copilot, Claude Code, Codex, and Warp to accelerate code generation, including the rapid creation of new APIs. Yet testing and environment readiness have become critical bottlenecks to delivery speed. Generating code faster does not guarantee faster releases when dependent services required for testing are unavailable, incomplete, or unstable. Parasoft Virtualize 2026.1, which includes the new Virtualize MCP server, addresses this challenge by extending AI-driven API mocking and service virtualization capabilities directly into the tools and workflows developers already use. Through the new Virtualize MCP server, developers can leverage Virtualize’s capabilities to generate, deploy, and manage REST API mocks from LLM clients or AI-enhanced IDEs without leaving their preferred working environment or requiring specialised tool expertise. By eliminating context switching and reducing reliance on deep service virtualization knowledge, teams can create test environments earlier to accelerate delivery cycles. The release also enables teams to configure autonomous, agentic workflows in which AI agents invoke Virtualize MCP server tools to dynamically create and manage API mocks within build pipelines. This ensures test environments are provisioned faster and remain aligned with rapidly evolving application architectures, reducing delays caused by unavailable service dependencies. Early adopters report significant reductions in the time required to create and maintain API mocks, along with faster test cycle execution due to improved environment readiness. Daniel Asch-Robles, Systems Test Engineer II, Business Technology at WoodmenLife commented on the ease of use, “These new MCP features in Virtualize make it much easier to quickly generate realistic virtual services, minimizing manual setup and accelerating test workflows.” Explore the New Capabilities Parasoft’s recognised innovations in software testing and quality engineering—including Virtualize, SOAtest, CTP, and DTP—earned the company back‑to‑back Devies Awards in the Microservices and Serverless category (2025, 2026). About Parasoft Parasoft helps organizations continuously deliver high-quality software with its AI-powered software testing platform and automated testing solutions. Parasoft’s technologies for embedded, enterprise, and IoT markets reduce the time, effort, and cost of delivering secure, reliable, and compliant software. Integrating static and runtime analysis, unit and API testing, and full-code coverage, Parasoft brings proven methodology to the entire software development lifecycle, from component testing through integration and system-level validation. Media Contacts For UK and U.S. inquiries: Elaine Hodson | elaine@napierb2b.com | +44 (0) 1243 531123 For EMEA inquiries: Beate Lorenzoni | beate@lorenzoni.de | +49 8122 559170
+MONROVIA, Calif.
+
+– May 19, 2026 – Parasoft, a global leader in automated software testing solutions, today announced autonomous API mocking for enterprise service virtualization via the Model Context Protocol (MCP)—eliminating dependency bottlenecks.
+
+The new Virtualize MCP server extends Parasoft’s AI-driven API mocking and service virtualization capabilities to external LLM clients and AI agents, enabling autonomous generation, deployment, and management of REST API mocks beyond the Virtualize UI and bringing agentic workflows directly into build pipelines.
+
+With these innovations, Parasoft Virtualize —an award-winning service virtualization solution for microservices and distributed architectures—now enables lightweight, AI-accelerated, developer-centric workflows for modern software delivery.
+
+Built for the Future of AI-Native Software Delivery Development teams increasingly rely on AI-enhanced IDEs and LLM-powered tools such as GitHub Copilot, Claude Code, Codex, and Warp to accelerate code generation, including the rapid creation of new APIs.
+
+Yet testing and environment readiness have become critical bottlenecks to delivery speed.
+
+Generating code faster does not guarantee faster releases when dependent services required for testing are unavailable, incomplete, or unstable.
+
+1, which includes the new Virtualize MCP server, addresses this challenge by extending AI-driven API mocking and service virtualization capabilities directly into the tools and workflows developers already use.
+
+Through the new Virtualize MCP server, developers can leverage Virtualize’s capabilities to generate, deploy, and manage REST API mocks from LLM clients or AI-enhanced IDEs without leaving their preferred working environment or requiring specialised tool expertise.
+
+By eliminating context switching and reducing reliance on deep service virtualization knowledge, teams can create test environments earlier to accelerate delivery cycles.
+
+The release also enables teams to configure autonomous, agentic workflows in which AI agents invoke Virtualize MCP server tools to dynamically create and manage API mocks within build pipelines.
+
+This ensures test environments are provisioned faster and remain aligned with rapidly evolving application architectures, reducing delays caused by unavailable service dependencies.
+
+Early adopters report significant reductions in the time required to create and maintain API mocks, along with faster test cycle execution due to improved environment readiness.
+
+” Explore the New Capabilities Parasoft’s recognised innovations in software testing and quality engineering—including Virtualize, SOAtest, CTP, and DTP—earned the company back‑to‑back Devies Awards in the Microservices and Serverless category (2025, 2026).
+
+About Parasoft Parasoft helps organizations continuously deliver high-quality software with its AI-powered software testing platform and automated testing solutions.
+
+Parasoft’s technologies for embedded, enterprise, and IoT markets reduce the time, effort, and cost of delivering secure, reliable, and compliant software.
+
+Integrating static and runtime analysis, unit and API testing, and full-code coverage, Parasoft brings proven methodology to the entire software development lifecycle, from component testing through integration and system-level validation.
+
+S. de | +49 8122 559170

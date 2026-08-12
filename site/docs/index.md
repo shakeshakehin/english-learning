@@ -10,9 +10,11 @@
 </div>
 
 <div id="crawl-console">
-  <h4>抓取新文章（按关键词）</h4>
+  <h4>抓取新文章（按主题 + 字数）</h4>
   <div class="crawl-row">
-    <input id="crawl-kw" type="text" placeholder="输入关键词，如 ai, automation, security">
+    <input id="crawl-kw" type="text" placeholder="输入主题关键词，如 ai, automation, coffee">
+    <input id="crawl-min" type="number" placeholder="最少字数" min="0">
+    <input id="crawl-max" type="number" placeholder="最多字数" min="0">
     <button id="crawl-copy">复制抓取命令</button>
     <a id="crawl-github" href="https://github.com/shakeshakehin/english-learning/actions/workflows/crawl.yml" target="_blank" rel="noopener">GitHub 手动触发</a>
   </div>

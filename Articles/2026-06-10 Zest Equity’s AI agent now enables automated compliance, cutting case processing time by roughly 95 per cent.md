@@ -11,4 +11,46 @@ type: article
 
 # Zest Equity’s AI agent now enables automated compliance, cutting case processing time by roughly 95 per cent
 
-ABU DHABI, 09 June 2026- Zest Equity, a digital transactional infrastructure company powering private-market transactions, today announced that its proprietary AI-powered compliance system, Tarth, is now powering the firm’s customer onboarding work end to end, from document analysis through to a recommendation ready for compliance review. The system has been developed in-house at Zest. Critically, this means that client documents and personal data are processed and stored entirely within Zest’s own infrastructure. Tarth now sits at the centre of how the firm manages its onboarding work, and marks Zest’s first full deployment of agentic AI. Every decision the system reaches is cited and evidenced through an audit trail with full accountability resting with the relevant Zest entity that is processing the onboarding. Tarth has compressed customer onboarding from roughly 60 minutes of compliance-officer time to a median of three minutes – the time Tarth needs to process the data and deliver a decision-ready recommendation to the compliance officer. This represents an exponential reduction in processing time when onboarding a new investor. The system has saved more than 800 hours of compliance work to date. Most clients now can now enjoy a seamless onboarding process. Each case arrives at the compliance officer’s desk pre-packaged with full documentation including citations and a risk analysis, all prepared by Tarth. Most importantly, that analysis is all based on the rules, requirements and risk assessment policies set by the compliance team for every jurisdiction – and is fully customizable. Tarth is presently deployed exclusively within the Zest Group. Given its potential to help external compliance teams scale operations and integrate agentic AI into their workflows, Zest sees immense value in Tarth beyond its own walls and is exploring externalising it as an additional product line. “Onboarding is extremely important work – it has to be done correctly, with the right assessments and proper diligence at every step. The real challenge is doing that at velocity and at scale, without losing the thoroughness,” said Zuhair Shamma, Chief Executive Officer of Zest Equity. “Tarth allows us to do both. We think of it as an agent on the team rather than a piece of software – it does the work and our compliance officers stay in the loop on every decision. That is how we have scaled onboarding volume without expanding the team behind it.” Rawan Baddour, Co-Founder of Zest Equity, said “Traceability was the design priority from the start. Compliance environments require every output to be traceable to its source. Every decision Tarth produces is cited back to the document, the database, or the rule that drove it. That makes the system suitable for a regulated workflow and gives the compliance team a file already assembled with the evidence in place.” Removing friction from private-markets transactions sits at the centre of Zest’s operating ethos. Tarth shows how that plays out inside compliance – AI handling the manual work, humans making the decisions, rigour intact throughout. —ENDS— About Zest Equity Group Zest Equity is a digital transactional infrastructure company powering private-market transactions. Built in the UAE and anchored within ADGM’s regulatory framework, Zest Equity develops its technology in the DIFC, where the company established its foundation and continues to build the core infrastructure behind its platform. Zest Equity operates global best-practice standards while providing regional fluency and institutional execution. The company offers regulated Arranging Deals in Investments and Providing Money Services under FSRA’s framework, along with a layer of digital execution capabilities for SPV formation and deal workflow management that simplify, safeguard, and scale private-market transactions. Its infrastructure brings all participants into a single, transparent, and repeatable workflow that unifies governance, documentation, and fund flows, enabling capital to move seamlessly and with confidence across jurisdictions. To learn more, visit https://www.zestequity.com/ .
+ABU DHABI, 09 June 2026- Zest Equity, a digital transactional infrastructure company powering private-market transactions, today announced that its proprietary AI-powered compliance system, Tarth, is now powering the firm’s customer onboarding work end to end, from document analysis through to a recommendation ready for compliance review.
+
+The system has been developed in-house at Zest. Critically, this means that client documents and personal data are processed and stored entirely within Zest’s own infrastructure.
+
+Tarth now sits at the centre of how the firm manages its onboarding work, and marks Zest’s first full deployment of agentic AI.
+
+Every decision the system reaches is cited and evidenced through an audit trail with full accountability resting with the relevant Zest entity that is processing the onboarding.
+
+Tarth has compressed customer onboarding from roughly 60 minutes of compliance-officer time to a median of three minutes – the time Tarth needs to process the data and deliver a decision-ready recommendation to the compliance officer.
+
+This represents an exponential reduction in processing time when onboarding a new investor. The system has saved more than 800 hours of compliance work to date. Most clients now can now enjoy a seamless onboarding process.
+
+Each case arrives at the compliance officer’s desk pre-packaged with full documentation including citations and a risk analysis, all prepared by Tarth.
+
+Most importantly, that analysis is all based on the rules, requirements and risk assessment policies set by the compliance team for every jurisdiction – and is fully customizable.
+
+Tarth is presently deployed exclusively within the Zest Group.
+
+Given its potential to help external compliance teams scale operations and integrate agentic AI into their workflows, Zest sees immense value in Tarth beyond its own walls and is exploring externalising it as an additional product line.
+
+“Onboarding is extremely important work – it has to be done correctly, with the right assessments and proper diligence at every step.
+
+The real challenge is doing that at velocity and at scale, without losing the thoroughness,” said Zuhair Shamma, Chief Executive Officer of Zest Equity. “Tarth allows us to do both.
+
+We think of it as an agent on the team rather than a piece of software – it does the work and our compliance officers stay in the loop on every decision.
+
+” Rawan Baddour, Co-Founder of Zest Equity, said “Traceability was the design priority from the start. Compliance environments require every output to be traceable to its source.
+
+Every decision Tarth produces is cited back to the document, the database, or the rule that drove it. ” Removing friction from private-markets transactions sits at the centre of Zest’s operating ethos.
+
+Tarth shows how that plays out inside compliance – AI handling the manual work, humans making the decisions, rigour intact throughout.
+
+—ENDS— About Zest Equity Group Zest Equity is a digital transactional infrastructure company powering private-market transactions.
+
+Built in the UAE and anchored within ADGM’s regulatory framework, Zest Equity develops its technology in the DIFC, where the company established its foundation and continues to build the core infrastructure behind its platform.
+
+Zest Equity operates global best-practice standards while providing regional fluency and institutional execution.
+
+The company offers regulated Arranging Deals in Investments and Providing Money Services under FSRA’s framework, along with a layer of digital execution capabilities for SPV formation and deal workflow management that simplify, safeguard, and scale private-market transactions.
+
+Its infrastructure brings all participants into a single, transparent, and repeatable workflow that unifies governance, documentation, and fund flows, enabling capital to move seamlessly and with confidence across jurisdictions.
+
+com/ .

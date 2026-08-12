@@ -10,6 +10,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 
@@ -82,15 +83,42 @@ def fetch_content(src, link):
 
 
 def clean_content(raw_html):
-    text = re.sub(r"<script.*?</script>|<style.*?</style>", " ", raw_html, flags=re.S)
-    text = re.sub(r"<[^>]+>", " ", text)
+    """清洗 HTML 为 markdown 正文：保留段落/标题结构（<p>/<h2>/<h3>/<li>）。
+    丢弃脚本/样式/图片/链接，保留可读文本，段落间用空行分隔。"""
+    raw_html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", raw_html, flags=re.S)
+    # 移除图片（保留 alt 文本可有可无，这里丢弃以免噪音）
+    raw_html = re.sub(r"<img[^>]*>", " ", raw_html, flags=re.I)
+    # 块级元素转为换行分隔，便于按标签分段
+    raw_html = re.sub(r"</p>|</h1>|</h2>|</h3>|</h4>|<br\s*/?>|</li>|</div>", "\n", raw_html, flags=re.I)
+    # 列表项加 "- "
+    raw_html = re.sub(r"<li[^>]*>", "- ", raw_html, flags=re.I)
+    # 标题转 markdown 井号
+    raw_html = re.sub(r"<h1[^>]*>", "## ", raw_html, flags=re.I)
+    raw_html = re.sub(r"<h2[^>]*>", "## ", raw_html, flags=re.I)
+    raw_html = re.sub(r"<h3[^>]*>", "### ", raw_html, flags=re.I)
+    raw_html = re.sub(r"<h4[^>]*>", "#### ", raw_html, flags=re.I)
+    # 剩余标签丢弃
+    text = re.sub(r"<[^>]+>", "", raw_html)
     text = H.unescape(text)
-    text = re.sub(r"\s+", " ", text).strip()
-    for marker in ["National DevOps Awards", "Learn more here", "Subscribe to our newsletter",
-                   "Click here to", "Contact us", "Follow us on"]:
-        text = text.replace(marker, " ")
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
+    # 分段：按换行切块，块内合并空白
+    blocks = []
+    for blk in text.split("\n"):
+        blk = re.sub(r"\s+", " ", blk).strip()
+        if blk:
+            blocks.append(blk)
+    # 去掉导航/广告类残句
+    drop = ["National DevOps Awards", "Learn more here", "Subscribe to our newsletter",
+            "Click here to", "Contact us", "Follow us on", "You may also like"]
+    blocks = [b for b in blocks if not any(d in b for d in drop)]
+    # 合并过短的块（非列表项、非标题）到上一段，避免碎片
+    merged = []
+    for b in blocks:
+        is_keep = b.startswith(("#", "- "))
+        if not merged or is_keep or len(b) > 140:
+            merged.append(b)
+        else:
+            merged[-1] = merged[-1] + " " + b
+    return "\n\n".join(merged)
 
 
 def main():
@@ -99,10 +127,15 @@ def main():
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--keyword", help="抓取关键词（逗号分隔），覆盖各源配置 topics")
+    ap.add_argument("--min-words", type=int, help="覆盖最小字数")
+    ap.add_argument("--max-words", type=int, help="覆盖最大字数")
+    ap.add_argument("--no-push", action="store_true", help="抓取+构建但不 git push（仅本地预览）")
     args = ap.parse_args()
     kw_override = None
     if args.keyword:
         kw_override = [k.strip() for k in args.keyword.split(",") if k.strip()]
+    min_words = args.min_words if args.min_words is not None else cfg.get("min_words", 250)
+    max_words = args.max_words if args.max_words is not None else cfg.get("max_words", 5000)
     existing_slugs = set()
     existing_names = set()
     for fn in os.listdir(ARTICLES):
@@ -152,14 +185,24 @@ def main():
             content = fetch_content(src, p["link"])
             if not content:
                 continue
+            # 尊重源 robots.txt 的 crawl-delay
+            delay = cfg.get("crawl_delay", 0) or src.get("crawl_delay", 0)
+            if delay:
+                time.sleep(delay)
             tags = match_topics(topics, p["title"], content)
             if topics and not tags:
                 continue
             body = clean_content(content)
             words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
-            if words < cfg.get("min_words", 250) or words > cfg.get("max_words", 5000):
+            if words < min_words or words > max_words:
                 continue
-            fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {p['title']}.md").replace("\xa0", " ")
+            # 文件名：清理非法字符 + 特殊引号/破折号（防 MkDocs URL 异常）
+            fn_title = p["title"]
+            fn_title = fn_title.replace("\u201c", "").replace("\u201d", "").replace("\u2018", "").replace("\u2019", "")
+            fn_title = fn_title.replace("\u2013", "-").replace("\u2014", "-").replace("\u2212", "-")
+            fn_title = fn_title.replace("\u00a0", " ").replace("\u00ae", "")
+            fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {fn_title}.md")
+            fn = re.sub(r"\s+", " ", fn).strip()
             # 分类：源固定分类优先，否则关键词映射，否则 General
             category = fixed_cat or "General"
             if not fixed_cat:
@@ -185,14 +228,18 @@ def main():
 
     if not added:
         print("no new articles")
-        return
-    print(f"added {len(added)} article(s)")
+    else:
+        print(f"added {len(added)} article(s)")
+    return args.no_push
 
 
 if __name__ == "__main__":
-    main()
-    # 构建站点（articles.json / wordDB.json / index.md / assets）
+    no_push = main()
+    # 构建站点（articles.json / wordDB.json / index.md / assets）—— 始终构建，便于前端资源更新上线
     subprocess.run([sys.executable, os.path.join(REPO, "site", "build.py")], check=True)
+    if no_push:
+        print("--no-push：已抓取+构建，未推送")
+        raise SystemExit(0)
     subprocess.run(["git", "add", "-A"], check=True)
     subprocess.run(["git", "commit", "-m",
                     f"auto-crawl {datetime.date.today().isoformat()}"], check=True)

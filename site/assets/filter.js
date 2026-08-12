@@ -65,6 +65,8 @@
 
     /* 抓取控制台 */
     if (crawlKw) {
+      var crawlMin = document.getElementById("crawl-min");
+      var crawlMax = document.getElementById("crawl-max");
       var t2 = null;
       crawlKw.addEventListener("input", function () {
         clearTimeout(t2);
@@ -75,11 +77,16 @@
           updateCrawl();
         }, 150);
       });
+      if (crawlMin) crawlMin.addEventListener("input", function () {
+        state.min = this.value; minInp.value = state.min; render(); updateCrawl();
+      });
+      if (crawlMax) crawlMax.addEventListener("input", function () {
+        state.max = this.value; maxInp.value = state.max; render(); updateCrawl();
+      });
       var copyBtn = document.getElementById("crawl-copy");
       if (copyBtn) {
         copyBtn.addEventListener("click", function () {
           var cmd = crawlCommand();
-          if (!cmd) { toast("先输入抓取关键词"); return; }
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(cmd).then(function () { toast("已复制抓取命令"); });
           } else {
@@ -116,27 +123,43 @@
       return;
     }
     listEl.innerHTML = "";
+    /* 按日期分组展示：同年-月为一组，组内按日期倒序 */
+    var groups = {};
     list.forEach(function (a) {
-      var card = document.createElement("a");
-      card.className = "article-card";
-      card.href = a.url;
-      var meta = [
-        a.category ? '<span class="tag">' + a.category + "</span>" : "",
-        (a.tags || []).map(function (t) { return '<span class="tag">' + t + "</span>"; }).join(""),
-        a.published ? a.published : "",
-        a.words ? a.words + " 词" : "",
-      ].filter(Boolean).join("");
-      card.innerHTML =
-        '<div class="ac-title"></div><div class="ac-meta">' + meta + "</div>";
-      card.querySelector(".ac-title").textContent = a.title;
-      listEl.appendChild(card);
+      var ym = (a.published || "").slice(0, 7); /* YYYY-MM */
+      if (!ym) ym = "未标注日期";
+      (groups[ym] = groups[ym] || []).push(a);
+    });
+    Object.keys(groups).sort().reverse().forEach(function (ym) {
+      var head = document.createElement("div");
+      head.className = "date-group";
+      head.textContent = ym + "（" + groups[ym].length + " 篇）";
+      listEl.appendChild(head);
+      groups[ym].forEach(function (a) {
+        var card = document.createElement("a");
+        card.className = "article-card";
+        card.href = a.url;
+        var meta = [
+          a.category ? '<span class="tag">' + a.category + "</span>" : "",
+          (a.tags || []).map(function (t) { return '<span class="tag">' + t + "</span>"; }).join(""),
+          a.published ? a.published.slice(5) : "",
+          a.words ? a.words + " 词" : "",
+        ].filter(Boolean).join("");
+        card.innerHTML = '<div class="ac-title"></div><div class="ac-meta">' + meta + "</div>";
+        card.querySelector(".ac-title").textContent = a.title;
+        listEl.appendChild(card);
+      });
     });
   }
 
   function crawlCommand() {
-    var kw = state.kw;
-    if (!kw) return "";
-    return "python crawl_and_build.py --keyword " + kw.split(/[,\s]+/).filter(Boolean).join(",");
+    var parts = ["python crawl_and_build.py"];
+    if (state.kw) {
+      parts.push("--keyword " + state.kw.split(/[,\s]+/).filter(Boolean).join(","));
+    }
+    if (state.min) parts.push("--min-words " + state.min);
+    if (state.max) parts.push("--max-words " + state.max);
+    return parts.join(" ");
   }
 
   function updateCrawl() {
@@ -150,10 +173,7 @@
         : "输入关键词可实时筛选文章，并生成抓取命令";
     }
     if (cmdEl) {
-      var cmd = crawlCommand();
-      cmdEl.textContent = cmd
-        ? "python crawl_and_build.py --keyword " + state.kw.split(/[,\s]+/).filter(Boolean).join(",")
-        : "python crawl_and_build.py（默认配置）";
+      cmdEl.textContent = crawlCommand();
     }
   }
 
