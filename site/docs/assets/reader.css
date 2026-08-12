@@ -293,11 +293,12 @@ body.focus-on .rw.vocab {
   padding: 10px 12px;
   margin: 8px 0;
 }
-.vocab-card .vc-top { display: flex; align-items: baseline; gap: 10px; }
-.vocab-card strong { font-size: 17px; }
-.vocab-card .vc-m { color: #b8860b; }
-.vocab-card .vc-s { margin-top: 4px; font-size: 13px; opacity: 0.8; }
-.vocab-card .vc-a { margin-top: 2px; font-size: 12px; opacity: 0.55; }
+.vocab-card .vc-word { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.vocab-card .vc-m { margin-top: 2px; font-size: 14px; color: #b8860b; }
+.vocab-card .vc-s { margin-top: 4px; font-size: 13px; opacity: 0.85; line-height: 1.45; }
+.vocab-card .vc-s span { font-style: italic; }
+.vocab-card .vc-a { margin-top: 3px; font-size: 12px; opacity: 0.55; }
+.vocab-card .vc-m span, .vocab-card .vc-m .lbl { }
 .vocab-day.hidden { display: none; }
 .vocab-synced-tbl { width: 100%; border-collapse: collapse; margin-top: 8px; }
 .vocab-synced-tbl th, .vocab-synced-tbl td {

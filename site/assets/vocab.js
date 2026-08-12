@@ -51,8 +51,8 @@
     groupByDate(entries).forEach(function (grp) {
       var d = grp[0], items = grp[1];
       var head = document.createElement("div");
-      head.className = "date-group vocab-group";
-      head.innerHTML = "<span class=\"dg-arrow\">▾</span> " + d + "（" + items.length + " 个）";
+      head.className = "date-group vocab-group collapsed"; /* 默认收起 */
+      head.innerHTML = "<span class=\"dg-arrow\">▸</span> " + d + "（" + items.length + " 个）";
       head.addEventListener("click", function () {
         var wrap = head.nextElementSibling;
         head.classList.toggle("collapsed");
@@ -61,16 +61,18 @@
       });
       listEl.appendChild(head);
       var wrap = document.createElement("div");
-      wrap.className = "vocab-day";
+      wrap.className = "vocab-day hidden";
       items.forEach(function (e) {
         var card = document.createElement("div");
         card.className = "vocab-card";
         card.innerHTML =
-          "<div class=\"vc-top\"><strong></strong><span class=\"vc-m\"></span></div>" +
-          "<div class=\"vc-s\"></div><div class=\"vc-a\"></div>";
-        card.querySelector("strong").textContent = e.word;
-        card.querySelector(".vc-m").textContent = e.meaning || "";
-        card.querySelector(".vc-s").textContent = e.sentence ? "『" + e.sentence + "』" : "";
+          "<div class=\"vc-word\">词：<strong></strong></div>" +
+          "<div class=\"vc-m\">翻译：<span></span></div>" +
+          "<div class=\"vc-s\">原句：<span></span></div>" +
+          "<div class=\"vc-a\"></div>";
+        card.querySelector(".vc-word strong").textContent = e.word;
+        card.querySelector(".vc-m span").textContent = e.meaning || "待补充";
+        card.querySelector(".vc-s span").textContent = e.sentence ? "『" + e.sentence + "』" : "（未记录原句）";
         card.querySelector(".vc-a").textContent = e.article ? "来源：" + e.article : "";
         wrap.appendChild(card);
       });

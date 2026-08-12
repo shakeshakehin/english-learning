@@ -132,10 +132,10 @@
     });
     Object.keys(groups).sort().reverse().forEach(function (ym) {
       var head = document.createElement("div");
-      head.className = "date-group";
-      head.innerHTML = "<span class=\"dg-arrow\">▾</span> " + ym + "（" + groups[ym].length + " 篇）";
+      head.className = "date-group collapsed"; /* 默认收起：进入先看日期，点击才展开 */
+      head.innerHTML = "<span class=\"dg-arrow\">▸</span> " + ym + "（" + groups[ym].length + " 篇）";
       var wrap = document.createElement("div");
-      wrap.className = "date-group-body";
+      wrap.className = "date-group-body hidden";
       head.addEventListener("click", function () {
         head.classList.toggle("collapsed");
         wrap.classList.toggle("hidden");
