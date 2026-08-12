@@ -7,7 +7,9 @@ cd "$VAULT"
 # 1. 同步内容到构建目录
 rm -rf "site/docs/Articles" "site/docs/Languages"
 cp -r "$VAULT/Articles" "site/docs/Articles"
-[ -d "$VAULT/Languages" ] && cp -r "$VAULT/Languages" "site/docs/Languages"
+# Languages 只保留构建缓存（cambridge_cache.json），不复制 wordDB.md——生词表统一由 Vocab 页展示，
+# wordDB.md 只是生词数据源，不应被 MkDocs 渲染成独立页面
+[ -d "$VAULT/Languages" ] && mkdir -p "site/docs/Languages" && [ -f "$VAULT/Languages/cambridge_cache.json" ] && cp "$VAULT/Languages/cambridge_cache.json" "site/docs/Languages/cambridge_cache.json"
 
 # 2. 生成 articles.json / wordDB.json / index.md，复制前端资源
 python "$(cygpath -w "$VAULT/site/build.py")"
