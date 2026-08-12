@@ -84,25 +84,22 @@ def fetch_content(src, link):
 
 def clean_content(raw_html):
     """清洗 HTML 为 markdown 正文：保留段落/标题结构（<p>/<h2>/<h3>/<li>）。
-    丢弃脚本/样式/图片/链接，保留可读文本，段落间用空行分隔。"""
+    丢弃脚本/样式/图片/链接；段落间用空行分隔，真段界（</p>/</h1-4>/</li>）与
+    行内折行（<br>）区分对待，避免吞并独立短段落。"""
     raw_html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", raw_html, flags=re.S)
-    # 移除图片（保留 alt 文本可有可无，这里丢弃以免噪音）
     raw_html = re.sub(r"<img[^>]*>", " ", raw_html, flags=re.I)
-    # 块级元素转为换行分隔，便于按标签分段
-    raw_html = re.sub(r"</p>|</h1>|</h2>|</h3>|</h4>|<br\s*/?>|</li>|</div>", "\n", raw_html, flags=re.I)
-    # 列表项加 "- "
+    # 真段界 -> 双换行；行内折行 <br> -> 单空格（同段）
+    raw_html = re.sub(r"</p>|</h1>|</h2>|</h3>|</h4>|</li>|</div>", "\n\n", raw_html, flags=re.I)
+    raw_html = re.sub(r"<br\s*/?>", " ", raw_html, flags=re.I)
     raw_html = re.sub(r"<li[^>]*>", "- ", raw_html, flags=re.I)
-    # 标题转 markdown 井号
-    raw_html = re.sub(r"<h1[^>]*>", "## ", raw_html, flags=re.I)
-    raw_html = re.sub(r"<h2[^>]*>", "## ", raw_html, flags=re.I)
+    raw_html = re.sub(r"<h1[^>]*>|<h2[^>]*>", "## ", raw_html, flags=re.I)
     raw_html = re.sub(r"<h3[^>]*>", "### ", raw_html, flags=re.I)
     raw_html = re.sub(r"<h4[^>]*>", "#### ", raw_html, flags=re.I)
-    # 剩余标签丢弃
     text = re.sub(r"<[^>]+>", "", raw_html)
     text = H.unescape(text)
-    # 分段：按换行切块，块内合并空白
+    # 按真段界切块，块内合并空白
     blocks = []
-    for blk in text.split("\n"):
+    for blk in text.split("\n\n"):
         blk = re.sub(r"\s+", " ", blk).strip()
         if blk:
             blocks.append(blk)
@@ -110,14 +107,16 @@ def clean_content(raw_html):
     drop = ["National DevOps Awards", "Learn more here", "Subscribe to our newsletter",
             "Click here to", "Contact us", "Follow us on", "You may also like"]
     blocks = [b for b in blocks if not any(d in b for d in drop)]
-    # 合并过短的块（非列表项、非标题）到上一段，避免碎片
+    # 只合并"上一块未以句末标点结尾的碎片"：短且像是行内折行残留才并入，
+    # 独立短句（以 .!?;: 结尾）保留为独立段，符合"按段落切小片"
     merged = []
     for b in blocks:
-        is_keep = b.startswith(("#", "- "))
-        if not merged or is_keep or len(b) > 140:
-            merged.append(b)
-        else:
+        if (merged and not merged[-1].startswith(("#", "- "))
+                and not re.search(r"[.!?;:]\s*$", merged[-1])
+                and len(b) < 120):
             merged[-1] = merged[-1] + " " + b
+        else:
+            merged.append(b)
     return "\n\n".join(merged)
 
 
