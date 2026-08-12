@@ -1,13 +1,30 @@
 {
-  "sources": ["https://softwaretestingnews.co.uk"],
-  "topics": [],
-  "categories": {
-    "ai": "AI / QA",
-    "automation": "Automation",
-    "security": "Security",
-    "testing": "QA",
-    "devops": "DevOps"
-  },
+  "sources": [
+    {
+      "url": "https://softwaretestingnews.co.uk",
+      "label": "Software Testing News",
+      "topics": [],
+      "categories": {
+        "ai": "AI / QA",
+        "automation": "Automation",
+        "security": "Security",
+        "testing": "QA",
+        "devops": "DevOps"
+      }
+    },
+    {
+      "url": "https://perfectdailygrind.com",
+      "label": "Perfect Daily Grind",
+      "topics": ["pour over", "pour-over", "brew", "drip", "v60", "chemex", "hand brewing", "filter coffee"],
+      "category": "Coffee"
+    },
+    {
+      "url": "https://sprudge.com",
+      "label": "Sprudge",
+      "topics": ["pour over", "pour-over", "brew guide", "v60", "chemex", "filter coffee"],
+      "category": "Coffee"
+    }
+  ],
   "min_words": 250,
   "max_words": 5000,
   "max_per_run": 3

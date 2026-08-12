@@ -27,17 +27,16 @@ def load_config():
     return json.load(open(os.path.join(REPO, "crawl-config.json"), encoding="utf-8"))
 
 
-def match_topics(cfg, title, body):
-    topics = cfg.get("topics") or []
+def match_topics(topics, title, body):
     if not topics:
         return []
     hay = (title + " " + body[:3000]).lower()
     return [t for t in topics if t.lower() in hay]
 
 
-def list_posts(cfg):
+def list_posts(src):
     """WordPress REST API 拉最新文章（标题/日期/链接/正文）"""
-    base = cfg["sources"][0].rstrip("/")
+    base = src["url"].rstrip("/")
     data = json.loads(fetch(base + "/wp-json/wp/v2/posts?per_page=20"))
     posts = []
     for p in data:
@@ -67,14 +66,14 @@ def clean_content(raw_html):
 
 def main():
     cfg = load_config()
-    # 命令行关键词覆盖（--keyword ai,automation）
+    # 命令行关键词覆盖（--keyword pour over,brew）——对所有源生效
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--keyword", help="抓取关键词（逗号分隔），覆盖配置 topics")
+    ap.add_argument("--keyword", help="抓取关键词（逗号分隔），覆盖各源配置 topics")
     args = ap.parse_args()
+    kw_override = None
     if args.keyword:
-        cfg["topics"] = [k.strip() for k in args.keyword.split(",") if k.strip()]
-    posts = list_posts(cfg)
+        kw_override = [k.strip() for k in args.keyword.split(",") if k.strip()]
     existing_slugs = set()
     existing_names = set()
     for fn in os.listdir(ARTICLES):
@@ -91,41 +90,48 @@ def main():
             pass
 
     added = []
-    for p in posts:
+    for src in cfg.get("sources", []):
         if len(added) >= cfg.get("max_per_run", 3):
             break
-        slug = p["link"].rstrip("/").split("/")[-1].lower()
-        key = p["title"].lower()
-        # 去重：URL slug 相同，或标题是已存在文件名子串
-        if slug in existing_slugs or any(key in e for e in existing_names):
-            continue
-        tags = match_topics(cfg, p["title"], p["content"])
-        if cfg.get("topics") and not tags:
-            continue
-        body = clean_content(p["content"])
-        words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
-        if words < cfg.get("min_words", 250) or words > cfg.get("max_words", 5000):
-            continue
-        fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {p['title']}.md").replace("\xa0", " ")
-        # 分类映射：关键词命中映射表则用映射类型，否则 General
-        cats_map = cfg.get("categories") or {}
-        category = "General"
-        for t in tags:
-            if t.lower() in cats_map:
-                category = cats_map[t.lower()]
+        topics = kw_override if kw_override is not None else (src.get("topics") or [])
+        src_label = src.get("label") or src["url"].split("//")[-1].rstrip("/")
+        src_cats = src.get("categories") or {}
+        fixed_cat = src.get("category")
+        for p in list_posts(src):
+            if len(added) >= cfg.get("max_per_run", 3):
                 break
-        front = (
-            f'---\ntitle: "{p["title"]}"\nsource: "Software Testing News"\n'
-            f'url: "{p["link"]}"\npublished: {p["date"]}\n'
-            f'added: {datetime.date.today().isoformat()}\n'
-            f'category: "{category}"\ntags: {json.dumps(tags, ensure_ascii=False)}\n'
-            f'type: article\n---\n\n# {p["title"]}\n\n{body}\n'
-        )
-        open(os.path.join(ARTICLES, fn), "w", encoding="utf-8").write(front)
-        existing_slugs.add(slug)
-        existing_names.add(fn[:-3].lower())
-        added.append((fn, words))
-        print("ADDED:", fn, f"({words} words)")
+            slug = p["link"].rstrip("/").split("/")[-1].lower()
+            key = p["title"].lower()
+            # 去重：URL slug 相同，或标题是已存在文件名子串
+            if slug in existing_slugs or any(key in e for e in existing_names):
+                continue
+            tags = match_topics(topics, p["title"], p["content"])
+            if topics and not tags:
+                continue
+            body = clean_content(p["content"])
+            words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
+            if words < cfg.get("min_words", 250) or words > cfg.get("max_words", 5000):
+                continue
+            fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {p['title']}.md").replace("\xa0", " ")
+            # 分类：源固定分类优先，否则关键词映射，否则 General
+            category = fixed_cat or "General"
+            if not fixed_cat:
+                for t in tags:
+                    if t.lower() in src_cats:
+                        category = src_cats[t.lower()]
+                        break
+            front = (
+                f'---\ntitle: "{p["title"]}"\nsource: "{src_label}"\n'
+                f'url: "{p["link"]}"\npublished: {p["date"]}\n'
+                f'added: {datetime.date.today().isoformat()}\n'
+                f'category: "{category}"\ntags: {json.dumps(tags, ensure_ascii=False)}\n'
+                f'type: article\n---\n\n# {p["title"]}\n\n{body}\n'
+            )
+            open(os.path.join(ARTICLES, fn), "w", encoding="utf-8").write(front)
+            existing_slugs.add(slug)
+            existing_names.add(fn[:-3].lower())
+            added.append((fn, words))
+            print("ADDED:", fn, f"({words} words)")
 
     if not added:
         print("no new articles")

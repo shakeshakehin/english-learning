@@ -2,8 +2,6 @@
 
 软件测试行业英语学习笔记。
 
-> **自动抓取配置**：softwaretestingnews.co.uk（全部主题），250–5000 词，每次最多 3 篇。每天自动更新。
-
 <div id="article-filter">
   <input id="f-search" type="text" placeholder="输入关键词实时筛选（如 ai / automation / 测试）">
   <input id="f-min" type="number" placeholder="最少字数" min="0">
@@ -25,4 +23,4 @@
 
 <div id="article-list"><p>加载中…</p></div>
 
-*最后更新: 2026-08-11*
+*最后更新: 2026-08-12*
