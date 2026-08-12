@@ -11,6 +11,7 @@ import re
 import subprocess
 import sys
 import urllib.parse
+from concurrent.futures import ThreadPoolExecutor
 
 import requests
 
@@ -120,15 +121,22 @@ def main():
     state = load_state()
     today = datetime.date.today().isoformat()
     added = []
-    for src in cfg.get("sources", []):
+    # 并行拉取各源文章列表（网络延迟重叠，整体提速）
+    sources = cfg.get("sources", [])
+    src_lists = {}
+    with ThreadPoolExecutor(max_workers=4) as ex:
+        future_map = {ex.submit(list_posts, s, state.get(s["url"])): s for s in sources}
+        for f in future_map:
+            src_lists[future_map[f]["url"]] = (future_map[f], f.result())
+    for src in sources:
         if len(added) >= cfg.get("max_per_run", 3):
             break
         topics = kw_override if kw_override is not None else (src.get("topics") or [])
         src_label = src.get("label") or src["url"].split("//")[-1].rstrip("/")
         src_cats = src.get("categories") or {}
         fixed_cat = src.get("category")
-        since = state.get(src["url"])
-        for p in list_posts(src, since):
+        posts = src_lists.get(src["url"], ([], []))[1]
+        for p in posts:
             if len(added) >= cfg.get("max_per_run", 3):
                 break
             slug = p["link"].rstrip("/").split("/")[-1].lower()
