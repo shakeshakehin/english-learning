@@ -263,18 +263,19 @@ def main():
     max_words = _words(args.max_words, cfg.get("max_words", 5000))
     existing_slugs = set()
     existing_names = set()
-    for fn in os.listdir(ARTICLES):
-        if not fn.endswith(".md"):
-            continue
-        existing_names.add(fn[:-3].lower())
-        try:
-            raw = open(os.path.join(ARTICLES, fn), encoding="utf-8").read()
-            m = re.search(r'^url:\s*"?([^"\n]+)"?', raw, re.M)
-            if m:
-                slug = m.group(1).rstrip("/").split("/")[-1].lower()
-                existing_slugs.add(slug)
-        except Exception:
-            pass
+    for root, _dirs, files in os.walk(ARTICLES):
+        for fn in files:
+            if not fn.endswith(".md"):
+                continue
+            existing_names.add(fn[:-3].lower())
+            try:
+                raw = open(os.path.join(root, fn), encoding="utf-8").read()
+                m = re.search(r'^url:\s*"?([^"\n]+)"?', raw, re.M)
+                if m:
+                    slug = m.group(1).rstrip("/").split("/")[-1].lower()
+                    existing_slugs.add(slug)
+            except Exception:
+                pass
 
     state = load_state()
     today = datetime.date.today().isoformat()
@@ -328,8 +329,17 @@ def main():
             fn_title = fn_title.replace("\u201c", "").replace("\u201d", "").replace("\u2018", "").replace("\u2019", "")
             fn_title = fn_title.replace("\u2013", "-").replace("\u2014", "-").replace("\u2212", "-")
             fn_title = fn_title.replace("\u00a0", " ").replace("\u00ae", "")
-            fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {fn_title}.md")
-            fn = re.sub(r"\s+", " ", fn).strip()
+            # 保存路径：源配置 subdir 时 -> Articles/<subdir>/<date>/<title>.md（日期目录分类）；
+            # 否则保持原有 Articles/<date> <title>.md 平铺
+            subdir = (src.get("subdir") or "").strip("/")
+            if subdir:
+                fn = re.sub(r'[\\/:*?"<>|]', "-", fn_title)
+                fn = re.sub(r"\s+", " ", fn).strip() + ".md"
+                out_dir = os.path.join(ARTICLES, subdir, p["date"] or "nodate")
+            else:
+                fn = re.sub(r'[\\/:*?"<>|]', "-", f"{p['date']} {fn_title}.md")
+                fn = re.sub(r"\s+", " ", fn).strip()
+                out_dir = ARTICLES
             # 分类：源固定分类优先，否则关键词映射，否则 General
             category = fixed_cat or "General"
             if not fixed_cat:
@@ -348,10 +358,11 @@ def main():
             tak = summarize_takeaways(p["title"], body)
             front += "### Key takeaways\n\n" + "\n\n".join("- " + t for t in tak) + "\n\n"
             front += body + "\n"
-            open(os.path.join(ARTICLES, fn), "w", encoding="utf-8").write(front)
+            os.makedirs(out_dir, exist_ok=True)
+            open(os.path.join(out_dir, fn), "w", encoding="utf-8").write(front)
             existing_slugs.add(slug)
             existing_names.add(fn[:-3].lower())
-            added.append((fn, words))
+            added.append((os.path.join(os.path.relpath(out_dir, ARTICLES), fn), words))
             added_src += 1
             print("ADDED:", fn, f"({words} words)")
         # 该源处理完：记录增量游标（下次只拉今天之后的新文章）

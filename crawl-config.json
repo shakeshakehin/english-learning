@@ -57,7 +57,8 @@
       "label": "The Guardian 社論",
       "type": "rss",
       "topics": [],
-      "category": "Op-ed"
+      "category": "Op-ed",
+      "subdir": "article-cre-data"
     },
     {
       "url": "https://www.theguardian.com",
@@ -65,7 +66,8 @@
       "label": "The Guardian 評論",
       "type": "rss",
       "topics": [],
-      "category": "Op-ed"
+      "category": "Op-ed",
+      "subdir": "article-cre-data"
     }
   ],
   "min_words": 250,

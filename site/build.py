@@ -39,22 +39,25 @@ def parse_frontmatter(text):
 
 def build_articles_json():
     articles = []
-    for fn in sorted(os.listdir(ARTICLES)):
-        if not fn.endswith(".md"):
-            continue
-        path = os.path.join(ARTICLES, fn)
-        raw = open(path, encoding="utf-8").read()
-        fm, body = parse_frontmatter(raw)
-        words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
-        url = "Articles/" + fn[:-3].replace(" ", "%20") + "/"
-        articles.append({
-            "title": fm.get("title", fn[:-3]),
-            "category": fm.get("category", fm.get("type", "未分类")),
-            "tags": fm.get("tags", []),
-            "published": fm.get("published", ""),
-            "words": words,
-            "url": url,
-        })
+    for root, _dirs, files in sorted(os.walk(ARTICLES)):
+        for fn in sorted(files):
+            if not fn.endswith(".md"):
+                continue
+            path = os.path.join(root, fn)
+            raw = open(path, encoding="utf-8").read()
+            fm, body = parse_frontmatter(raw)
+            words = len([w for w in body.split() if re.search(r"[A-Za-z]", w)])
+            # 相对 Articles 的目录路径（如 article-cre-data/2026-08-13 或空）
+            rel_dir = os.path.relpath(root, ARTICLES).replace(os.sep, "/")
+            url = "Articles/" + (rel_dir + "/" if rel_dir != "." else "") + fn[:-3].replace(" ", "%20") + "/"
+            articles.append({
+                "title": fm.get("title", fn[:-3]),
+                "category": fm.get("category", fm.get("type", "未分类")),
+                "tags": fm.get("tags", []),
+                "published": fm.get("published", ""),
+                "words": words,
+                "url": url,
+            })
     articles.sort(key=lambda a: a["published"], reverse=True)
     out = os.path.join(DOCS, "articles.json")
     json.dump(articles, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
