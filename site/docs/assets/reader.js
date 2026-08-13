@@ -118,6 +118,7 @@
     if (!paras.length) return null;
     var tokens = [];
     var sid = 0;
+    var _sidText = {}; /* sid -> 句子完整原文（含空格），供生词原句使用 */
     function processPara(p) {
       var walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
       var nodes = [];
@@ -129,13 +130,19 @@
         var frag = document.createDocumentFragment();
         parts.forEach(function (part) {
           if (!part) return;
-          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          if (/^\s+$/.test(part)) {
+            /* 空格：计入 sidText 保留原始空格，但不切词 */
+            if (_sidText) _sidText[sid] = (_sidText[sid] || "") + part;
+            frag.appendChild(document.createTextNode(part));
+            return;
+          }
           var span = document.createElement("span");
           span.className = "rw";
           span.textContent = part;
           span.dataset.sid = sid;
           frag.appendChild(span);
           tokens.push(span);
+          if (_sidText) _sidText[sid] = (_sidText[sid] || "") + part;
           if (/[.!?;:]$/.test(part)) sid++;
         });
         n.parentNode.replaceChild(frag, n);
@@ -143,7 +150,9 @@
     }
     /* 处理 p 和 li（列表/引用内容也纳入） */
     content.querySelectorAll("p, li").forEach(processPara);
-    if (tokens.length < 20) return null;
+    /* 短文也启用聚焦阅读（此前 <20 词直接 return null 导致短文无工具条）。
+       0 词（无可切文本）才放弃。 */
+    if (!tokens.length) return null;
 
     /* ---- 分部分：仅长文（≥3000 词）按句子边界切成若干部分，便于分节阅读 ----
        短文（多数）不分部分，整体一屏滚动 + 逐词聚焦即可。 */
@@ -301,12 +310,13 @@
 
     /* ---- 生词按钮：点击直接标记当前聚焦词 ---- */
     function currentSentence() {
-      /* 取当前聚焦词所在句子的完整文本 */
+      /* 取当前聚焦词所在句子的完整文本（保留空格） */
       var el = currentEl || findCenterWord();
       if (!el || !el.dataset.sid) return "";
       var s = el.dataset.sid;
+      if (_sidText && _sidText[s]) return _sidText[s].trim();
       var parts = partTokens().filter(function (t) { return t.dataset.sid === s; });
-      return parts.map(function (t) { return t.textContent; }).join("").trim();
+      return parts.map(function (t) { return t.textContent; }).join(" ").trim();
     }
     function articleTitle() {
       var h = document.querySelector("h1");

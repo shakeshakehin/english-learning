@@ -7,6 +7,13 @@
   <span>本机标记 <b id="vocab-count">0</b> 个</span>
   <button id="vocab-export">导出为 wordDB 表格</button>
   <button id="vocab-clear">清空本机标记</button>
+  <button id="vocab-review">随机复习一句</button>
+</div>
+
+<div id="vocab-review-box" hidden>
+  <div id="vocab-review-sentence"></div>
+  <div id="vocab-review-word"></div>
+  <button id="vocab-review-next">换一句</button>
 </div>
 
 <div id="vocab-list"><p>加载中…</p></div>

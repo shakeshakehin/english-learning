@@ -300,6 +300,22 @@ body.focus-on .rw.vocab {
 .vocab-card .vc-a { margin-top: 3px; font-size: 12px; opacity: 0.55; }
 .vocab-card .vc-m span, .vocab-card .vc-m .lbl { }
 .vocab-day.hidden { display: none; }
+
+/* ===== 随机复习区 ===== */
+#vocab-review-box {
+  border: 1px solid rgba(0,0,0,0.15);
+  border-left: 4px solid #b8860b;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 14px 0;
+  background: rgba(0,0,0,0.02);
+}
+#vocab-review-sentence { font-size: 16px; line-height: 1.6; margin-bottom: 8px; }
+#vocab-review-sentence .rv-hl { background: #ffd54f; color: #000; border-radius: 3px; padding: 0 2px; font-weight: 600; }
+#vocab-review-word { font-size: 14px; color: #b8860b; margin-bottom: 10px; }
+#vocab-review-word .rv-src { font-size: 12px; opacity: 0.55; }
+#vocab-review-next { font-size: 13px; padding: 5px 12px; border: 1px solid rgba(0,0,0,0.22); border-radius: 8px; background: transparent; cursor: pointer; }
+
 .vocab-synced-tbl { width: 100%; border-collapse: collapse; margin-top: 8px; }
 .vocab-synced-tbl th, .vocab-synced-tbl td {
   border: 1px solid rgba(0,0,0,0.12); padding: 6px 8px; text-align: left; font-size: 13px;
