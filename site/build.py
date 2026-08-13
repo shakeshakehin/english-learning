@@ -103,6 +103,19 @@ def build_worddb_json():
     # 去重（保留首个）
     seen = set()
     words = [w for w in words if not (w["word"] in seen or seen.add(w["word"]))]
+    # 并入网页同步到本地的词（local_vocab.json），其 meaning 优先但不覆盖剑桥权威释义
+    lv_path = os.path.join(LANGUAGES, "local_vocab.json")
+    if os.path.exists(lv_path):
+        try:
+            lv = json.load(open(lv_path, encoding="utf-8"))
+            if isinstance(lv, dict):
+                lv_seen = set(w["word"] for w in words)
+                for w, e in lv.items():
+                    if isinstance(e, dict) and w not in lv_seen and re.fullmatch(r"[a-z][a-z'\-]*", w):
+                        words.append({"word": w, "meaning": e.get("meaning") or ""})
+                        lv_seen.add(w)
+        except Exception:
+            pass
     # 剑桥缓存覆盖释义（权威词典级）
     merged = []
     covered = set()

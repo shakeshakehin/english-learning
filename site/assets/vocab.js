@@ -178,6 +178,20 @@
   };
 
   renderLocal();
+  /* 打开生词表：从本地词库拉取合并（"从本地上传"），并推送本地散词 */
+  if (window.SyncVocab) {
+    window.SyncVocab.fullSync(loadLocal()).then(function (res) {
+      if (res && res.merged) {
+        saveLocal(res.merged);   /* 以合并结果覆盖会话缓存 */
+        renderLocal();           /* 重新渲染，本地词也出现 */
+        var st = document.getElementById("vocab-sync-status");
+        if (st) st.textContent = "● 已与本地词库双向同步（" + Object.keys(res.merged).length + " 词）";
+      } else {
+        var st = document.getElementById("vocab-sync-status");
+        if (st) st.textContent = "○ 本地同步服务未连接（仅本机，可运行 sync_server.py 开启）";
+      }
+    });
+  }
   fetch(siteBase() + "wordDB.json", { cache: "no-store" })
     .then(function (r) { return r.ok ? r.json() : []; })
     .then(renderSynced)

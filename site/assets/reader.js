@@ -341,6 +341,12 @@
           date: new Date().toISOString().slice(0, 10), /* 标记日期 YYYY-MM-DD */
         };
         saveLocalVocab(local2);
+        /* 同步到本地词库文件（服务不可达时静默，标记不丢） */
+        if (window.SyncVocab) {
+          window.SyncVocab.push(word, local2[word]).then(function (ok) {
+            if (ok) toast("✓ 已标记「" + word + "」并同步到本地");
+          }).catch(function () {});
+        }
         var n = highlightWordInPage(word);
         toast("✓ 已标记「" + word + "」" + (zh ? "：" + zh : "") + (n ? "（高亮" + n + "处）" : ""));
       });

@@ -1,7 +1,9 @@
 # 生词表
 
 > 阅读时点「生词」按钮标记的词会显示在这里（含来源原句与日期）。
-> 说明：本机标记仅存当前浏览器；要把生词同步到全站，把「管理」面板复制的内容贴到本地 `Languages/wordDB.md` 后运行 `deploy.sh`。
+> 双向同步：标记时写入本地词库文件（`Languages/local_vocab.json`），打开本页自动从本地拉取合并。需先运行本地服务 `python sync_server.py`；未连接时仅存当前浏览器。
+
+<div id="vocab-sync-status" class="vocab-sync">○ 检测本地同步服务…</div>
 
 <div id="vocab-toolbar">
   <span>本机标记 <b id="vocab-count">0</b> 个</span>

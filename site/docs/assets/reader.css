@@ -459,3 +459,13 @@ body.focus-on .rw.vocab {
 #lexi-float span {
   word-break: break-all;
 }
+
+/* 生词表页：本地同步状态 */
+.vocab-sync {
+  margin: 4px 0 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+}

@@ -29,8 +29,9 @@ extra:
 extra_css:
   - assets/reader.css?v=20260813c
 extra_javascript:
-  - assets/reader.js?v=20260813c
-  - assets/filter.js?v=20260813c
-  - assets/vocab.js?v=20260813c
+  - assets/sync.js?v=20260813d
+  - assets/reader.js?v=20260813d
+  - assets/filter.js?v=20260813e
+  - assets/vocab.js?v=20260813d
 plugins:
   - search

@@ -62,46 +62,57 @@
       render();
       updateCrawl();
     });
-
-    /* 抓取控制台 */
-    if (crawlKw) {
-      var crawlMin = document.getElementById("crawl-min");
-      var crawlMax = document.getElementById("crawl-max");
-      var t2 = null;
-      crawlKw.addEventListener("input", function () {
-        clearTimeout(t2);
-        t2 = setTimeout(function () {
-          state.kw = crawlKw.value.trim();
-          search.value = state.kw;
-          render();
-          updateCrawl();
-        }, 150);
-      });
-      if (crawlMin) crawlMin.addEventListener("input", function () {
-        state.min = this.value; minInp.value = state.min; render(); updateCrawl();
-      });
-      if (crawlMax) crawlMax.addEventListener("input", function () {
-        state.max = this.value; maxInp.value = state.max; render(); updateCrawl();
-      });
-      var copyBtn = document.getElementById("crawl-copy");
-      if (copyBtn) {
-        copyBtn.addEventListener("click", function () {
-          var cmd = crawlCommand();
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(cmd).then(function () { toast("已复制抓取命令"); });
-          } else {
-            var ta = document.createElement("textarea");
-            ta.value = cmd;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand("copy");
-            ta.remove();
-            toast("已复制抓取命令");
-          }
-        });
-      }
-    }
   }
+
+  /* 抓取控制台：独立绑定，不依赖 articles.json 加载，保证复制按钮始终可用 */
+  function bindCrawl() {
+    var crawlKw = document.getElementById("crawl-kw");
+    if (!crawlKw) return;
+    var crawlMin = document.getElementById("crawl-min");
+    var crawlMax = document.getElementById("crawl-max");
+    var t2 = null;
+    crawlKw.addEventListener("input", function () {
+      clearTimeout(t2);
+      t2 = setTimeout(function () {
+        state.kw = crawlKw.value.trim();
+        var search = document.getElementById("f-search");
+        if (search) search.value = state.kw;
+        render();
+        updateCrawl();
+      }, 150);
+    });
+    if (crawlMin) crawlMin.addEventListener("input", function () {
+      state.min = this.value;
+      var minInp = document.getElementById("f-min");
+      if (minInp) minInp.value = state.min;
+      render(); updateCrawl();
+    });
+    if (crawlMax) crawlMax.addEventListener("input", function () {
+      state.max = this.value;
+      var maxInp = document.getElementById("f-max");
+      if (maxInp) maxInp.value = state.max;
+      render(); updateCrawl();
+    });
+    var copyBtn = document.getElementById("crawl-copy");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", function () {
+        var cmd = crawlCommand();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cmd).then(function () { toast("已复制抓取命令"); });
+        } else {
+          var ta = document.createElement("textarea");
+          ta.value = cmd;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+          toast("已复制抓取命令");
+        }
+      });
+    }
+    updateCrawl();
+  }
+  bindCrawl();
 
   function matchesKw(a, kw) {
     if (!kw) return true;
