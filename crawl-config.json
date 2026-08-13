@@ -4,6 +4,7 @@
       "url": "https://softwaretestingnews.co.uk",
       "label": "Software Testing News",
       "topics": [],
+      "subdir": "testing",
       "categories": {
         "ai": "AI / QA",
         "automation": "Automation",
@@ -16,6 +17,7 @@
       "url": "https://www.softwaretestinghelp.com",
       "label": "Software Testing Help",
       "topics": [],
+      "subdir": "testing",
       "categories": {
         "ai": "AI / QA",
         "automation": "Automation",
@@ -31,25 +33,29 @@
       "url": "https://perfectdailygrind.com",
       "label": "Perfect Daily Grind",
       "topics": ["pour over", "pour-over", "v60", "chemex", "hand brewing", "filter coffee", "drip coffee"],
-      "category": "Coffee"
+      "category": "Coffee",
+      "subdir": "coffee"
     },
     {
       "url": "https://sprudge.com",
       "label": "Sprudge",
       "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee"],
-      "category": "Coffee"
+      "category": "Coffee",
+      "subdir": "coffee"
     },
     {
       "url": "https://dailycoffeenews.com",
       "label": "Daily Coffee News",
       "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee", "brewing"],
-      "category": "Coffee"
+      "category": "Coffee",
+      "subdir": "coffee"
     },
     {
       "url": "https://www.baristamagazine.com",
       "label": "Barista Magazine",
       "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee", "brewing", "manual brew"],
-      "category": "Coffee"
+      "category": "Coffee",
+      "subdir": "coffee"
     },
     {
       "url": "https://www.theguardian.com",

@@ -24,24 +24,6 @@
   "url": "Articles/article-cre-data/2026-08-13/Jason%20Arday%20is%20now%20the%20stick%20the%20right%20will%20use%20to%20beat%20back%20racial%20equality.%20Dont%20let%20that%20happen%20-%20Afua%20Hirsch/"
  },
  {
-  "title": "Producers are increasingly scrutinising every stage of coffee processing",
-  "category": "Coffee",
-  "tags": [
-   "coffee"
-  ],
-  "published": "2026-08-12",
-  "words": 1362,
-  "url": "Articles/2026-08-12%20Producers%20are%20increasingly%20scrutinising%20every%20stage%20of%20coffee%20processing/"
- },
- {
-  "title": "The Unexamined Pass",
-  "category": "General",
-  "tags": [],
-  "published": "2026-08-12",
-  "words": 3638,
-  "url": "Articles/2026-08-12%20The%20Unexamined%20Pass/"
- },
- {
   "title": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
   "category": "Op-ed",
   "tags": [],
@@ -58,6 +40,24 @@
   "url": "Articles/article-cre-data/2026-08-12/The%20Guardian%20view%20on%20early%20prisoner%20release-%20dont%20lose%20sight%20of%20systemic%20reform%20-%20Editorial/"
  },
  {
+  "title": "Producers are increasingly scrutinising every stage of coffee processing",
+  "category": "Coffee",
+  "tags": [
+   "coffee"
+  ],
+  "published": "2026-08-12",
+  "words": 1362,
+  "url": "Articles/coffee/2026-08-12%20Producers%20are%20increasingly%20scrutinising%20every%20stage%20of%20coffee%20processing/"
+ },
+ {
+  "title": "The Unexamined Pass",
+  "category": "General",
+  "tags": [],
+  "published": "2026-08-12",
+  "words": 3638,
+  "url": "Articles/testing/2026-08-12%20The%20Unexamined%20Pass/"
+ },
+ {
   "title": "Build-Outs Of Coffee: Milk Brew In Pasadena, CA",
   "category": "Coffee",
   "tags": [
@@ -65,15 +65,7 @@
   ],
   "published": "2026-08-11",
   "words": 561,
-  "url": "Articles/2026-08-11%20Build-Outs%20Of%20Coffee-%20Milk%20Brew%20In%20Pasadena,%20CA/"
- },
- {
-  "title": "Sigstore Creator Launches nolabs to Stop AI Agents Running Wild",
-  "category": "General",
-  "tags": [],
-  "published": "2026-08-11",
-  "words": 847,
-  "url": "Articles/2026-08-11%20Sigstore%20Creator%20Launches%20nolabs%20to%20Stop%20AI%20Agents%20Running%20Wild/"
+  "url": "Articles/coffee/2026-08-11%20Build-Outs%20Of%20Coffee-%20Milk%20Brew%20In%20Pasadena,%20CA/"
  },
  {
   "title": "What is “Strong” Coffee? It May Depend on Cultural Context",
@@ -83,7 +75,15 @@
   ],
   "published": "2026-08-11",
   "words": 625,
-  "url": "Articles/2026-08-11%20What%20is%20Strong%20Coffee-%20It%20May%20Depend%20on%20Cultural%20Context/"
+  "url": "Articles/coffee/2026-08-11%20What%20is%20Strong%20Coffee-%20It%20May%20Depend%20on%20Cultural%20Context/"
+ },
+ {
+  "title": "Sigstore Creator Launches nolabs to Stop AI Agents Running Wild",
+  "category": "General",
+  "tags": [],
+  "published": "2026-08-11",
+  "words": 847,
+  "url": "Articles/testing/2026-08-11%20Sigstore%20Creator%20Launches%20nolabs%20to%20Stop%20AI%20Agents%20Running%20Wild/"
  },
  {
   "title": "Eight Arrested in Fun Coffee Fraud Investigation",
@@ -93,7 +93,7 @@
   ],
   "published": "2026-08-10",
   "words": 435,
-  "url": "Articles/2026-08-10%20Eight%20Arrested%20in%20Fun%20Coffee%20Fraud%20Investigation/"
+  "url": "Articles/coffee/2026-08-10%20Eight%20Arrested%20in%20Fun%20Coffee%20Fraud%20Investigation/"
  },
  {
   "title": "Six enforcement risk zones every regulated brand should understand",
@@ -101,7 +101,7 @@
   "tags": [],
   "published": "2026-08-10",
   "words": 1023,
-  "url": "Articles/2026-08-10%20Six%20enforcement%20risk%20zones%20every%20regulated%20brand%20should%20understand/"
+  "url": "Articles/testing/2026-08-10%20Six%20enforcement%20risk%20zones%20every%20regulated%20brand%20should%20understand/"
  },
  {
   "title": "Why specialty coffee is now gaining wider recognition outside the industry",
@@ -111,7 +111,7 @@
   ],
   "published": "2026-08-05",
   "words": 1602,
-  "url": "Articles/2026-08-05%20Why%20specialty%20coffee%20is%20now%20gaining%20wider%20recognition%20outside%20the%20industry/"
+  "url": "Articles/coffee/2026-08-05%20Why%20specialty%20coffee%20is%20now%20gaining%20wider%20recognition%20outside%20the%20industry/"
  },
  {
   "title": "NTT DATA Named Headline Partner of The European Software Testing Awards 2026",
@@ -119,7 +119,7 @@
   "tags": [],
   "published": "2026-08-03",
   "words": 803,
-  "url": "Articles/2026-08-03%20NTT%20DATA%20Named%20Headline%20Partner%20of%20The%20European%20Software%20Testing%20Awards%202026/"
+  "url": "Articles/testing/2026-08-03%20NTT%20DATA%20Named%20Headline%20Partner%20of%20The%20European%20Software%20Testing%20Awards%202026/"
  },
  {
   "title": "Why hospitality is one of the hardest parts of running a coffee shop",
@@ -129,7 +129,7 @@
   ],
   "published": "2026-07-23",
   "words": 1088,
-  "url": "Articles/2026-07-23%20Why%20hospitality%20is%20one%20of%20the%20hardest%20parts%20of%20running%20a%20coffee%20shop/"
+  "url": "Articles/coffee/2026-07-23%20Why%20hospitality%20is%20one%20of%20the%20hardest%20parts%20of%20running%20a%20coffee%20shop/"
  },
  {
   "title": "The push for novel varieties is bringing overlooked coffees back into the spotlight",
@@ -139,7 +139,7 @@
   ],
   "published": "2026-07-22",
   "words": 1322,
-  "url": "Articles/2026-07-22%20The%20push%20for%20novel%20varieties%20is%20bringing%20overlooked%20coffees%20back%20into%20the%20spotlight/"
+  "url": "Articles/coffee/2026-07-22%20The%20push%20for%20novel%20varieties%20is%20bringing%20overlooked%20coffees%20back%20into%20the%20spotlight/"
  },
  {
   "title": "Test Drive: The Hario NEO—The Latest Upgrade to the V60",
@@ -151,7 +151,7 @@
   ],
   "published": "2026-07-20",
   "words": 1506,
-  "url": "Articles/2026-07-20%20Test%20Drive-%20The%20Hario%20NEO-The%20Latest%20Upgrade%20to%20the%20V60/"
+  "url": "Articles/coffee/2026-07-20%20Test%20Drive-%20The%20Hario%20NEO-The%20Latest%20Upgrade%20to%20the%20V60/"
  },
  {
   "title": "Testing AI-Infused Applications: What Digital Transformation Actually Demands Of Your QA Practice",
@@ -163,7 +163,7 @@
   ],
   "published": "2026-07-20",
   "words": 992,
-  "url": "Articles/2026-07-20%20Testing%20AI-Infused%20Applications/"
+  "url": "Articles/testing/2026-07-20%20Testing%20AI-Infused%20Applications/"
  },
  {
   "title": "The Unanswerable Test Suite: How to Test AI Systems That Sound Right When They Are Wrong",
@@ -171,7 +171,7 @@
   "tags": [],
   "published": "2026-07-17",
   "words": 1406,
-  "url": "Articles/2026-07-17%20The%20Unanswerable%20Test%20Suite-%20How%20to%20Test%20AI%20Systems%20That%20Sound%20Right%20When%20They%20Are%20Wrong/"
+  "url": "Articles/testing/2026-07-17%20The%20Unanswerable%20Test%20Suite-%20How%20to%20Test%20AI%20Systems%20That%20Sound%20Right%20When%20They%20Are%20Wrong/"
  },
  {
   "title": "Support tickets are slowing developers down – and it’s time to move on",
@@ -179,7 +179,7 @@
   "tags": [],
   "published": "2026-07-16",
   "words": 870,
-  "url": "Articles/2026-07-16%20Support%20tickets%20are%20slowing%20developers%20down%20–%20and%20it’s%20time%20to%20move%20on/"
+  "url": "Articles/testing/2026-07-16%20Support%20tickets%20are%20slowing%20developers%20down%20–%20and%20it’s%20time%20to%20move%20on/"
  },
  {
   "title": "New Aeroquip by Danfoss DataCryo DC394 hose simplifies installation, enhances reliability of data center liquid cooling systems",
@@ -187,7 +187,7 @@
   "tags": [],
   "published": "2026-06-26",
   "words": 546,
-  "url": "Articles/2026-06-26%20New%20Aeroquip%20by%20Danfoss%20DataCryo%20DC394%20hose%20simplifies%20installation,%20enhances%20reliability%20of%20data%20center%20liquid%20cooling%20systems/"
+  "url": "Articles/testing/2026-06-26%20New%20Aeroquip%20by%20Danfoss%20DataCryo%20DC394%20hose%20simplifies%20installation,%20enhances%20reliability%20of%20data%20center%20liquid%20cooling%20systems/"
  },
  {
   "title": "Poor Test Data Quality: The Ultimate Perpetuator of Software Defects in the AI Era",
@@ -195,7 +195,7 @@
   "tags": [],
   "published": "2026-06-23",
   "words": 992,
-  "url": "Articles/2026-06-23%20Poor%20Test%20Data%20Quality-%20The%20Ultimate%20Perpetuator%20of%20Software%20Defects%20in%20the%20AI%20Era/"
+  "url": "Articles/testing/2026-06-23%20Poor%20Test%20Data%20Quality-%20The%20Ultimate%20Perpetuator%20of%20Software%20Defects%20in%20the%20AI%20Era/"
  },
  {
   "title": "How connected motors, drives and monitoring technologies turn industrial energy data into operational advantages",
@@ -203,7 +203,7 @@
   "tags": [],
   "published": "2026-06-18",
   "words": 1344,
-  "url": "Articles/2026-06-18%20How%20connected%20motors,%20drives%20and%20monitoring%20technologies%20turn%20industrial%20energy%20data%20into%20operational%20advantages/"
+  "url": "Articles/testing/2026-06-18%20How%20connected%20motors,%20drives%20and%20monitoring%20technologies%20turn%20industrial%20energy%20data%20into%20operational%20advantages/"
  },
  {
   "title": "Zest Equity’s AI agent now enables automated compliance, cutting case processing time by roughly 95 per cent",
@@ -211,7 +211,7 @@
   "tags": [],
   "published": "2026-06-10",
   "words": 632,
-  "url": "Articles/2026-06-10%20Zest%20Equity’s%20AI%20agent%20now%20enables%20automated%20compliance,%20cutting%20case%20processing%20time%20by%20roughly%2095%20per%20cent/"
+  "url": "Articles/testing/2026-06-10%20Zest%20Equity’s%20AI%20agent%20now%20enables%20automated%20compliance,%20cutting%20case%20processing%20time%20by%20roughly%2095%20per%20cent/"
  },
  {
   "title": "95% of CISOs Pressured to Suppress or Delay Compliance-Related Security Issues, Even as AI-Generated Code Multiplies Their Attack Surface",
@@ -219,7 +219,7 @@
   "tags": [],
   "published": "2026-06-09",
   "words": 942,
-  "url": "Articles/2026-06-09%2095%%20of%20CISOs%20Pressured%20to%20Suppress%20or%20Delay%20Compliance-Related%20Security%20Issues,%20Even%20as%20AI-Generated%20Code%20Multiplies%20Their%20Attack%20Surface/"
+  "url": "Articles/testing/2026-06-09%2095%%20of%20CISOs%20Pressured%20to%20Suppress%20or%20Delay%20Compliance-Related%20Security%20Issues,%20Even%20as%20AI-Generated%20Code%20Multiplies%20Their%20Attack%20Surface/"
  },
  {
   "title": "Tricentis Report: 60% of Global Organizations are Shipping Untested Code as AI Accelerates Software Development",
@@ -227,7 +227,7 @@
   "tags": [],
   "published": "2026-06-04",
   "words": 934,
-  "url": "Articles/2026-06-04%20Tricentis%20Report-%2060%%20of%20Global%20Organizations%20are%20Shipping%20Untested%20Code%20as%20AI%20Accelerates%20Software%20Development/"
+  "url": "Articles/testing/2026-06-04%20Tricentis%20Report-%2060%%20of%20Global%20Organizations%20are%20Shipping%20Untested%20Code%20as%20AI%20Accelerates%20Software%20Development/"
  },
  {
   "title": "BridgeWise’s Context Analytics Launches First-of-Its-Kind Podcast Sentiment Analysis and Scoring for Investors",
@@ -235,7 +235,7 @@
   "tags": [],
   "published": "2026-06-03",
   "words": 586,
-  "url": "Articles/2026-06-03%20BridgeWise’s%20Context%20Analytics%20Launches%20First-of-Its-Kind%20Podcast%20Sentiment%20Analysis%20and%20Scoring%20for%20Investors/"
+  "url": "Articles/testing/2026-06-03%20BridgeWise’s%20Context%20Analytics%20Launches%20First-of-Its-Kind%20Podcast%20Sentiment%20Analysis%20and%20Scoring%20for%20Investors/"
  },
  {
   "title": "What It Means to Be a Digital-First Business",
@@ -243,7 +243,7 @@
   "tags": [],
   "published": "2026-06-02",
   "words": 814,
-  "url": "Articles/2026-06-02%20What%20It%20Means%20to%20Be%20a%20Digital-First%20Business/"
+  "url": "Articles/testing/2026-06-02%20What%20It%20Means%20to%20Be%20a%20Digital-First%20Business/"
  },
  {
   "title": "Entries Now Open for the Asia Pacific Software Testing Awards 2026",
@@ -251,7 +251,7 @@
   "tags": [],
   "published": "2026-05-28",
   "words": 642,
-  "url": "Articles/2026-05-28%20Entries%20Now%20Open%20for%20the%20Asia%20Pacific%20Software%20Testing%20Awards%202026/"
+  "url": "Articles/testing/2026-05-28%20Entries%20Now%20Open%20for%20the%20Asia%20Pacific%20Software%20Testing%20Awards%202026/"
  },
  {
   "title": "Microchip Launches 3.3 kV HV-D3 mSiC Power Modules to Enable Solid-State Transformers for AI Data Centers",
@@ -259,7 +259,7 @@
   "tags": [],
   "published": "2026-05-26",
   "words": 620,
-  "url": "Articles/2026-05-26%20Microchip%20Launches%203.3%20kV%20HV-D3%20mSiC%20Power%20Modules%20to%20Enable%20Solid-State%20Transformers%20for%20AI%20Data%20Centers/"
+  "url": "Articles/testing/2026-05-26%20Microchip%20Launches%203.3%20kV%20HV-D3%20mSiC%20Power%20Modules%20to%20Enable%20Solid-State%20Transformers%20for%20AI%20Data%20Centers/"
  },
  {
   "title": "In conversation with the VP of Global Platform Engineering, Data & Personalsation at NBCUniversal",
@@ -267,7 +267,7 @@
   "tags": [],
   "published": "2026-05-22",
   "words": 799,
-  "url": "Articles/2026-05-22%20In%20conversation%20with%20the%20VP%20of%20Global%20Platform%20Engineering,%20Data%20&%20Personalsation%20at%20NBCUniversal/"
+  "url": "Articles/testing/2026-05-22%20In%20conversation%20with%20the%20VP%20of%20Global%20Platform%20Engineering,%20Data%20&%20Personalsation%20at%20NBCUniversal/"
  },
  {
   "title": "Parasoft Eliminates Dependency Bottlenecks With MCP-Powered, AI-Driven API Mocking",
@@ -275,7 +275,7 @@
   "tags": [],
   "published": "2026-05-20",
   "words": 478,
-  "url": "Articles/2026-05-20%20Parasoft%20Eliminates%20Dependency%20Bottlenecks%20With%20MCP-Powered,%20AI-Driven%20API%20Mocking/"
+  "url": "Articles/testing/2026-05-20%20Parasoft%20Eliminates%20Dependency%20Bottlenecks%20With%20MCP-Powered,%20AI-Driven%20API%20Mocking/"
  },
  {
   "title": "LaunchDarkly Brings Runtime Control to the Agent Era",
@@ -283,7 +283,7 @@
   "tags": [],
   "published": "2026-05-19",
   "words": 553,
-  "url": "Articles/2026-05-19%20LaunchDarkly%20Brings%20Runtime%20Control%20to%20the%20Agent%20Era/"
+  "url": "Articles/testing/2026-05-19%20LaunchDarkly%20Brings%20Runtime%20Control%20to%20the%20Agent%20Era/"
  },
  {
   "title": "How Automation Is Shaping The Future Of Tech",
@@ -295,6 +295,6 @@
   ],
   "published": "2025-07-21",
   "words": 413,
-  "url": "Articles/2025-07-21%20How%20Automation%20Is%20Shaping%20The%20Future%20Of%20Tech/"
+  "url": "Articles/testing/2025-07-21%20How%20Automation%20Is%20Shaping%20The%20Future%20Of%20Tech/"
  }
 ]
