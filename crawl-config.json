@@ -50,6 +50,22 @@
       "label": "Barista Magazine",
       "topics": ["pour over", "pour-over", "v60", "chemex", "filter coffee", "brewing", "manual brew"],
       "category": "Coffee"
+    },
+    {
+      "url": "https://www.theguardian.com",
+      "feed": "https://www.theguardian.com/tone/editorials/rss",
+      "label": "The Guardian 社論",
+      "type": "rss",
+      "topics": [],
+      "category": "Op-ed"
+    },
+    {
+      "url": "https://www.theguardian.com",
+      "feed": "https://www.theguardian.com/commentisfree/rss",
+      "label": "The Guardian 評論",
+      "type": "rss",
+      "topics": [],
+      "category": "Op-ed"
     }
   ],
   "min_words": 250,

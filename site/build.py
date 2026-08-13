@@ -161,7 +161,12 @@ def build_index(articles):
         try:
             c = json.load(open(crawl_cfg, encoding="utf-8"))
             topics = c.get("topics") or []
-            srcs = [s.split("//")[-1].rstrip("/") for s in c.get("sources", [])]
+            srcs = []
+            for s in c.get("sources", []):
+                if isinstance(s, str):
+                    srcs.append(s.split("//")[-1].rstrip("/"))
+                else:
+                    srcs.append(s.get("label") or s.get("url", "").split("//")[-1].rstrip("/"))
             lines += [
                 "> **自动抓取配置**：" + ("；".join(srcs)) +
                 ("（主题：" + "、".join(topics) + "）" if topics else "（全部主题）") +

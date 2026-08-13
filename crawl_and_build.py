@@ -13,6 +13,7 @@ import sys
 import time
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
+from email.utils import parsedate_to_datetime
 
 import requests
 
@@ -53,7 +54,13 @@ def match_topics(topics, title, body):
 
 
 def list_posts(src, since):
-    """增量拉文章列表（字段瘦身：仅 title/date/link；since 后仅拉新文章）"""
+    """增量拉文章列表（字段瘦身：仅 title/date/link；since 后仅拉新文章）
+    支持两种源类型：
+      - WordPress REST API（默认）
+      - RSS/Atom feed（src["type"] == "rss"，如 Guardian/报刊 op-ed）
+    """
+    if src.get("type") == "rss":
+        return list_posts_rss(src, since)
     base = src["url"].rstrip("/")
     params = "per_page=20&_fields=title,date,link"
     if since:
@@ -71,8 +78,56 @@ def list_posts(src, since):
     return posts
 
 
+def list_posts_rss(src, since):
+    """RSS/Atom 源：解析 feed 标题/链接/日期，since 后仅拉新文章"""
+    feed_url = (src.get("feed") or src.get("rss") or src["url"]).rstrip("/")
+    try:
+        data = fetch(feed_url)
+    except Exception:
+        return []
+    import xml.etree.ElementTree as ET
+    try:
+        root = ET.fromstring(data)
+    except ET.ParseError:
+        return []
+    posts = []
+    # RSS 2.0: channel/item；Atom: feed/entry（用 local-name 判定，兼容两种）
+    def local(tag):
+        return tag.rsplit("}", 1)[-1]
+    items = []
+    for el in root.iter():
+        if local(el.tag) in ("item", "entry"):
+            items.append(el)
+    for item in items:
+        title = link = date = ""
+        for child in item.iter():
+            ln = local(child.tag)
+            if ln == "title" and not title:
+                title = (child.text or "").strip()
+            elif ln == "link" and not link:
+                link = (child.text or "").strip() or child.get("href", "")
+            elif ln in ("pubDate", "published", "updated") and not date:
+                date = (child.text or "").strip()
+        title = H.unescape(re.sub(r"<[^>]+>", "", title)).strip()
+        if not title or not link:
+            continue
+        if date:
+            try:
+                date = parsedate_to_datetime(date).date().isoformat()
+            except Exception:
+                date = date[:10]
+        if since and date and date < since:
+            continue
+        posts.append({"title": title, "date": date or "", "link": link})
+    return posts
+
+
 def fetch_content(src, link):
-    """按需拉单篇正文（仅候选文章）"""
+    """按需拉单篇正文（仅候选文章）
+    RSS 源：抓 HTML 页提取正文段落；WordPress 源：走 REST API
+    """
+    if src.get("type") == "rss":
+        return fetch_content_html(link)
     slug = link.rstrip("/").split("/")[-1]
     url = src["url"].rstrip("/") + "/wp-json/wp/v2/posts?slug=" + urllib.parse.quote(slug) + "&_fields=content"
     try:
@@ -80,6 +135,37 @@ def fetch_content(src, link):
     except Exception:
         return ""
     return data[0]["content"]["rendered"] if data else ""
+
+
+def fetch_content_html(link):
+    """抓普通 HTML 页面正文：提取 <p>/<h2>/<h3>/<li> 段落骨架，
+    返回 HTML 片段交给 clean_content 统一清洗（保留段落结构）。
+    选择器逐个尝试：Guardian 正文容器 data-gu-name="body" -> 通用 <article>/main 容器 -> 全页 <p>。
+    """
+    try:
+        html = fetch(link)
+    except Exception:
+        return ""
+    if not html:
+        return ""
+    container = None
+    m = re.search(r'<div[^>]*data-gu-name="body"[^>]*>(.*?)</div>\s*(?:<div|</article|</main)', html, re.S)
+    if not m:
+        m = re.search(r'<article[^>]*>(.*?)</article>', html, re.S)
+    if not m:
+        m = re.search(r'<main[^>]*>(.*?)</main>', html, re.S)
+    if m:
+        container = m.group(1)
+    scope = container if container else html
+    # 提取段落骨架（丢弃脚本/样式/iframe/表单）
+    scope = re.sub(r"<script.*?</script>|<style.*?</style>|<iframe.*?</iframe>|<form.*?</form>", " ", scope, flags=re.S)
+    kept = []
+    for mm in re.finditer(r"<(p|h2|h3|h4|li)[^>]*>.*?</\1>", scope, flags=re.S | re.I):
+        if re.sub(r"<[^>]+>", "", mm.group(0)).strip():
+            kept.append(mm.group(0))
+    if not kept:
+        return ""
+    return "\n".join(kept)
 
 
 def clean_content(raw_html):
@@ -105,7 +191,10 @@ def clean_content(raw_html):
             blocks.append(blk)
     # 去掉导航/广告类残句
     drop = ["National DevOps Awards", "Learn more here", "Subscribe to our newsletter",
-            "Click here to", "Contact us", "Follow us on", "You may also like"]
+            "Click here to", "Contact us", "Follow us on", "You may also like",
+            "View image in fullscreen", "Skip to main content", "Sign in", "Sign up",
+            "Most viewed", "Explore more on these topics", "Topics", "Newsletters",
+            "Do you have an opinion on the issues raised"]
     blocks = [b for b in blocks if not any(d in b for d in drop)]
     # 只合并"上一块未以句末标点结尾的碎片"：短且像是行内折行残留才并入，
     # 独立短句（以 .!?;: 结尾）保留为独立段，符合"按段落切小片"
@@ -194,9 +283,9 @@ def main():
     sources = cfg.get("sources", [])
     src_lists = {}
     with ThreadPoolExecutor(max_workers=4) as ex:
-        future_map = {ex.submit(list_posts, s, state.get(s["url"])): s for s in sources}
-        for f in future_map:
-            src_lists[future_map[f]["url"]] = (future_map[f], f.result())
+        future_map = {ex.submit(list_posts, s, state.get(s.get("feed") or s["url"])): s for s in sources}
+        for f, src in future_map.items():
+            src_lists[src.get("feed") or src["url"]] = (src, f.result())
     for src in sources:
         if len(added) >= cfg.get("max_per_run", 3):
             break
@@ -204,7 +293,7 @@ def main():
         src_label = src.get("label") or src["url"].split("//")[-1].rstrip("/")
         src_cats = src.get("categories") or {}
         fixed_cat = src.get("category")
-        posts = src_lists.get(src["url"], ([], []))[1]
+        posts = src_lists.get(src.get("feed") or src["url"], (None, []))[1]
         for p in posts:
             if len(added) >= cfg.get("max_per_run", 3):
                 break
@@ -263,7 +352,7 @@ def main():
             added.append((fn, words))
             print("ADDED:", fn, f"({words} words)")
         # 该源处理完：记录增量游标（下次只拉今天之后的新文章）
-        state[src["url"]] = today
+        state[src.get("feed") or src["url"]] = today
     save_state(state)
 
     if not added:
