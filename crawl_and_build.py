@@ -287,15 +287,17 @@ def main():
         for f, src in future_map.items():
             src_lists[src.get("feed") or src["url"]] = (src, f.result())
     for src in sources:
-        if len(added) >= cfg.get("max_per_run", 3):
-            break
         topics = kw_override if kw_override is not None else (src.get("topics") or [])
         src_label = src.get("label") or src["url"].split("//")[-1].rstrip("/")
         src_cats = src.get("categories") or {}
         fixed_cat = src.get("category")
         posts = src_lists.get(src.get("feed") or src["url"], (None, []))[1]
+        # 每源独立额度（源配置 max_per_run 优先，否则全局值）——全局共享会导致
+        # 排在后面的源（如 RSS op-ed）永远分不到名额
+        src_max = src.get("max_per_run", cfg.get("max_per_run", 3))
+        added_src = 0
         for p in posts:
-            if len(added) >= cfg.get("max_per_run", 3):
+            if added_src >= src_max:
                 break
             slug = p["link"].rstrip("/").split("/")[-1].lower()
             key = p["title"].lower()
@@ -350,6 +352,7 @@ def main():
             existing_slugs.add(slug)
             existing_names.add(fn[:-3].lower())
             added.append((fn, words))
+            added_src += 1
             print("ADDED:", fn, f"({words} words)")
         # 该源处理完：记录增量游标（下次只拉今天之后的新文章）
         state[src.get("feed") or src["url"]] = today

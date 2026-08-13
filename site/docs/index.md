@@ -2,6 +2,8 @@
 
 软件测试行业英语学习笔记。
 
+> **自动抓取配置**：Software Testing News；Software Testing Help；Perfect Daily Grind；Sprudge；Daily Coffee News；Barista Magazine；The Guardian 社論；The Guardian 評論（全部主题），250–5000 词，每源每次最多 2 篇。每天自动更新。
+
 <div id="article-filter">
   <input id="f-search" type="text" placeholder="输入关键词实时筛选（如 ai / automation / 测试）">
   <input id="f-min" type="number" placeholder="最少字数" min="0">

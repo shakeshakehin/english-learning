@@ -70,6 +70,6 @@
   ],
   "min_words": 250,
   "max_words": 5000,
-  "max_per_run": 3,
+  "max_per_run": 2,
   "crawl_delay": 3
 }

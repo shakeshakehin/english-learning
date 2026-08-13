@@ -170,7 +170,7 @@ def build_index(articles):
             lines += [
                 "> **自动抓取配置**：" + ("；".join(srcs)) +
                 ("（主题：" + "、".join(topics) + "）" if topics else "（全部主题）") +
-                f"，{c.get('min_words', 200)}–{c.get('max_words', 5000)} 词，每次最多 {c.get('max_per_run', 3)} 篇。每天自动更新。",
+                f"，{c.get('min_words', 200)}–{c.get('max_words', 5000)} 词，每源每次最多 {c.get('max_per_run', 3)} 篇。每天自动更新。",
                 "",
             ]
         except Exception:
