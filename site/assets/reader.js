@@ -1,11 +1,14 @@
 /* ============================================================
- * reader.js —— 文章页功能（v2）：
+ * reader.js —— 文章页功能（v3）：
  *  1. 生词高亮：wordDB.json（全站同步）+ 本机标记（localStorage）合并高亮
  *  2. 聚焦阅读（无障碍）：当前词放大高亮 + 当前句淡背景，其余文字淡化；
  *     页面滚动自动跟随；右侧中间控制条滚轮逐词精细推进
  *  3. 分部分阅读：长文章按句子边界切成若干部分，可翻页跳转
- *  4. 生词标记：点「生词」按钮直接标记当前聚焦词（无需框选/二次确认）
- *  5. 框选自动翻译：选中英文文本自动查词显示中文释义（同 Obsidian 体验）
+ *  4. 生词标记（支持短语）：点「生词」按钮或框选（单词/短语）→ 统一浮层，
+ *     未标记显示翻译+「标记为生词」，已标记显示「✓ 已在生词表」（共用同一弹窗）
+ *  5. 翻译改自「句译截取」：整句一次翻译，从句子译文里截取目标词对应片段，
+ *     释义带上下文、一词多义正确；浮层同时展示整句中文（辅助理解）
+ *  6. 段意自检卡：每段末可折叠「本段大意」（整段中译）——先自己概括再对照
  * ============================================================ */
 (function () {
   "use strict";
@@ -39,6 +42,14 @@
   function cleanWord(t) {
     return t.replace(/^[^A-Za-z]+/, "").replace(/[^A-Za-z]+$/, "").toLowerCase();
   }
+  /* 生词条目键：单词或短语统一小写、合并空白 */
+  function cleanKey(q) {
+    return (q || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+  function articleTitle() {
+    var h = document.querySelector("h1");
+    return h ? h.textContent.trim() : (document.title || "");
+  }
   function mergeVocab(serverList) {
     var map = {};
     (serverList || []).forEach(function (w) { map[w.word.toLowerCase()] = w.meaning || ""; });
@@ -61,8 +72,14 @@
     toastEl._t = setTimeout(function () { toastEl.hidden = true; }, 2600);
   }
 
-  /* ================= 翻译（Google gtx，支持 CORS） ================= */
-  function translate(q) {
+  /* ================= 翻译（Google gtx，支持 CORS）================= */
+  /* 「从句子的翻译中截取生词释义」：
+     把目标词用标记 [[[OPEN]]]词[[[CLOSE]]] 包住再整句翻译，
+     标记之间即该词在句中的中文释义（带上下文、一词多义正确），
+     去掉标记即整句中文译文。一次请求同时拿到两者。
+     返回 { full:整句中文, extracted:该词释义 } 或 null。 */
+  var sentCache = {}; /* 请求句 -> 译文缓存（同一句只请求一次） */
+  function gtx(q) {
     return fetch(
       "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=" +
         encodeURIComponent(q),
@@ -71,16 +88,33 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (!j || !j[0]) return "";
-        var s = "";
-        (j[0] || []).forEach(function (x) { if (x && x[0]) s += x[0]; });
-        return s.trim();
+        return (j[0] || []).filter(function (x) { return x && x[0]; })
+          .map(function (x) { return x[0]; }).join("").trim();
       })
       .catch(function () { return ""; });
   }
-
-  /* 用翻译接口查词（优先整词，失败退整句/短语） */
-  function lookup(q) {
-    return translate(q);
+  function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function translateSentence(sentenceText, wrapWord) {
+    var q = sentenceText;
+    var cacheKey = sentenceText;
+    if (wrapWord) {
+      cacheKey = sentenceText + "\u0001" + wrapWord.toLowerCase();
+      var re = new RegExp("(" + escRe(wrapWord) + ")", "i");
+      q = sentenceText.replace(re, "[[[OPEN]]]$1[[[CLOSE]]]");
+    }
+    if (sentCache[cacheKey]) return Promise.resolve(sentCache[cacheKey]);
+    return gtx(q).then(function (full) {
+      var out = { full: full, extracted: "" };
+      if (wrapWord) {
+        var m = full.match(/\[\[\[OPEN\]\]\](.*?)\[\[\[CLOSE\]\]\]/);
+        if (m) {
+          out.extracted = m[1].trim();
+          out.full = full.replace(/\[\[\[(?:OPEN|CLOSE)\]\]]/g, "").trim();
+        }
+      }
+      sentCache[cacheKey] = out;
+      return out;
+    });
   }
 
   /* ================= 1. 生词高亮（对已切词 token 补 vocab 类） ================= */
@@ -106,6 +140,53 @@
       }
     });
     return hit;
+  }
+  /* 标记短语后：按词序在连续 token 上找匹配序列并高亮（best-effort） */
+  function highlightPhraseInPage(phrase) {
+    var words = cleanKey(phrase).split(" ").map(cleanWord).filter(Boolean);
+    if (!words.length) return 0;
+    var spans = Array.prototype.slice.call(document.querySelectorAll(".md-content .rw"));
+    var hit = 0, i = 0;
+    while (i < spans.length) {
+      var j = 0, k = i;
+      while (k < spans.length && j < words.length &&
+             cleanWord(spans[k].textContent) === words[j]) {
+        k++; j++;
+      }
+      if (j === words.length) {
+        for (var m = i; m < k; m++) {
+          if (!spans[m].classList.contains("vocab")) { spans[m].classList.add("vocab"); hit++; }
+        }
+        i = k;
+      } else { i++; }
+    }
+    return hit;
+  }
+  /* 统一的「已标记」状态标签 */
+  function markedSpan() {
+    var s = document.createElement("span");
+    s.className = "lf-status";
+    s.textContent = "✓ 已在生词表";
+    return s;
+  }
+  /* 统一的生词入库逻辑：写 localStorage + 同步 + 页面高亮 */
+  function addVocabEntry(key, display, zh, sentence, fullTrans) {
+    var local = loadLocalVocab();
+    if (local[key]) return { ok: false, reason: "exists" };
+    local[key] = {
+      meaning: zh || "待补充",
+      sentTrans: fullTrans || "",
+      ts: Date.now(),
+      sentence: sentence || "",
+      article: articleTitle(),
+      date: new Date().toISOString().slice(0, 10),
+    };
+    saveLocalVocab(local);
+    if (window.SyncVocab) {
+      window.SyncVocab.push(key, local[key]).catch(function () {});
+    }
+    var n = display.indexOf(" ") < 0 ? highlightWordInPage(cleanKey(display)) : highlightPhraseInPage(display);
+    return { ok: true, highlight: n };
   }
 
   /* ================= 2/3/4/5. 聚焦阅读 + 分部分 + 生词 + 翻译 ================= */
@@ -174,6 +255,42 @@
     var totalParts = parts.length;
     var curPart = 0;
 
+    /* ---- 段意自检卡：每段末一个可折叠「本段大意」----
+       流程：先自己用中文/英文一句话概括这段，再点开对照整句/整段译文。
+       译文由 Google 整段翻译提供（复用句子缓存）。 */
+    var gistCards = [];
+    content.querySelectorAll("p").forEach(function (p) {
+      var card = document.createElement("div");
+      card.className = "pgist";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "pgist-t";
+      btn.textContent = "本段大意 · 先自己概括，再展开对照";
+      var body = document.createElement("div");
+      body.className = "pgist-b";
+      body.hidden = true;
+      card.appendChild(btn);
+      card.appendChild(body);
+      if (p.nextSibling) p.parentNode.insertBefore(card, p.nextSibling);
+      else p.parentNode.appendChild(card);
+      var text = (p.textContent || "").replace(/\s+/g, " ").trim();
+      btn.addEventListener("click", function () {
+        var open = body.hidden;
+        if (open && !body.dataset.loaded) {
+          body.dataset.loaded = "1";
+          body.textContent = "翻译中…";
+          function render() {
+            body.textContent = (sentCache[text] && sentCache[text].full) || "(未能获取大意)";
+          }
+          if (sentCache[text]) render();
+          else translateSentence(text).then(render);
+        }
+        body.hidden = !open;
+        btn.classList.toggle("open", !open);
+      });
+      gistCards.push({ p: p, card: card });
+    });
+
     /* 生词高亮（词表异步加载后由外部调用） */
     function applyMap(map) { applyVocabToTokens(map); }
 
@@ -211,6 +328,11 @@
       curPart = Math.max(0, Math.min(totalParts - 1, p));
       tokens.forEach(function (t) {
         t.classList.toggle("part-hidden", parts[curPart].indexOf(t) < 0);
+      });
+      /* 段意卡跟随：只显示当前部分所属段落的卡 */
+      gistCards.forEach(function (gc) {
+        var inPart = parts[curPart].some(function (t) { return gc.p.contains(t); });
+        gc.card.style.display = inPart ? "" : "none";
       });
       if (partEl) partEl.textContent = "Part " + (curPart + 1) + "/" + totalParts;
     }
@@ -318,59 +440,98 @@
       var parts = partTokens().filter(function (t) { return t.dataset.sid === s; });
       return parts.map(function (t) { return t.textContent; }).join(" ").trim();
     }
-    function articleTitle() {
-      var h = document.querySelector("h1");
-      return h ? h.textContent.trim() : (document.title || "");
-    }
     function markCurrentWord() {
       var el = currentEl || findCenterWord();
       if (!el) { toast("未定位到当前词"); return; }
       var word = cleanWord(el.textContent);
       if (!word) { toast("当前不是英文单词"); return; }
+      var key = cleanKey(word);
+      var sent = currentSentence();
       var local = loadLocalVocab();
-      if (local[word]) { toast("「" + word + "」已在生词表"); highlightWordInPage(word); return; }
-      toast("正在标记「" + word + "」…");
-      lookup(word).then(function (zh) {
-        var local2 = loadLocalVocab();
-        if (local2[word]) { toast("「" + word + "」已在生词表"); return; }
-        local2[word] = {
-          meaning: zh || "待补充",
-          ts: Date.now(),
-          sentence: currentSentence(),   /* 来源原句 */
-          article: articleTitle(),       /* 来源文章标题 */
-          date: new Date().toISOString().slice(0, 10), /* 标记日期 YYYY-MM-DD */
-        };
-        saveLocalVocab(local2);
-        /* 同步到本地词库文件（服务不可达时静默，标记不丢） */
-        if (window.SyncVocab) {
-          window.SyncVocab.push(word, local2[word]).then(function (ok) {
-            if (ok) toast("✓ 已标记「" + word + "」并同步到本地");
-          }).catch(function () {});
-        }
-        var n = highlightWordInPage(word);
-        toast("✓ 已标记「" + word + "」" + (zh ? "：" + zh : "") + (n ? "（高亮" + n + "处）" : ""));
+      if (local[key]) {
+        /* 已标记：直接显示已标记卡片（与未标记共用同一弹窗） */
+        showCardNear(el, word, local[key].meaning || "", true, { sentence: sent });
+        return;
+      }
+      toast("正在翻译所在句…");
+      translateSentence(sent, word).then(function (tr) {
+        var zh = tr ? (tr.extracted || tr.full) : "";
+        showCardNear(el, word, zh, false, { sentence: sent, fullTrans: tr ? tr.full : "" });
       });
     }
     if (vocabBtn) vocabBtn.addEventListener("click", markCurrentWord);
 
-    /* ---- 框选自动翻译浮层 ---- */
-    function showFloat(x, y, q, zh) {
+    /* ---- 统一翻译/标记浮层（词/短语卡片）----
+       新标记与已标记共用同一弹窗：未标记显示翻译+「标记为生词」，
+       已标记显示「✓ 已在生词表」。停留 20s，悬停不消失，可点 × 关闭。 */
+    function showCardNear(anchorEl, q, zh, already, info) {
+      showCard(anchorEl.getBoundingClientRect(), q, zh, already, info);
+    }
+    function showCard(rect, q, zh, already, info) {
+      info = info || {};
       var old = document.getElementById("lexi-float");
       if (old) old.remove();
       var f = document.createElement("div");
       f.id = "lexi-float";
-      f.innerHTML = "<strong></strong><span></span>";
+      var html = '<button class="lf-close" type="button" title="关闭">×</button>' +
+        "<strong></strong><span class=\"lf-zh\"></span>";
+      if (info.fullTrans) html += '<div class="lf-sent"></div>';
+      html += '<div class="lf-foot"></div>';
+      f.innerHTML = html;
       f.querySelector("strong").textContent = q;
-      f.querySelector("span").textContent = zh || "(无释义)";
+      f.querySelector(".lf-zh").textContent = zh || "(无释义)";
+      if (info.fullTrans) f.querySelector(".lf-sent").textContent = info.fullTrans;
+      var foot = f.querySelector(".lf-foot");
+      var key = cleanKey(q);
+      var local = loadLocalVocab();
+      var marked = already || !!local[key];
+      if (marked) {
+        foot.appendChild(markedSpan());
+      } else {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "lf-mark";
+        btn.textContent = "标记为生词";
+        btn.addEventListener("click", function () {
+          var res = addVocabEntry(key, q, zh, info.sentence || "", info.fullTrans || "");
+          if (res.ok) {
+            btn.replaceWith(markedSpan());
+            f.querySelector(".lf-zh").textContent = zh || "待补充";
+            toast("✓ 已标记「" + q + "」" + (res.highlight ? "（高亮" + res.highlight + "处）" : ""));
+          } else {
+            toast("「" + q + "」已在生词表");
+            btn.replaceWith(markedSpan());
+          }
+        });
+        foot.appendChild(btn);
+      }
       document.body.appendChild(f);
       var w = f.offsetWidth, h = f.offsetHeight;
+      var x = rect.left + (rect.width ? rect.width / 2 : 0);
+      var y = rect.top;
       var left = Math.max(8, Math.min(window.innerWidth - w - 8, x));
       var top = y - h - 10;
-      if (top < 8) top = y + 16;
+      if (top < 8) top = y + (rect.height || 16) + 8;
       f.style.left = left + "px";
       f.style.top = top + "px";
       clearTimeout(f._t);
-      f._t = setTimeout(function () { f.remove(); }, 8000);
+      function schedule() { f._t = setTimeout(function () { f.remove(); }, 20000); }
+      schedule();
+      f.addEventListener("mouseenter", function () { clearTimeout(f._t); });
+      f.addEventListener("mouseleave", schedule);
+      f.querySelector(".lf-close").addEventListener("click", function () { f.remove(); });
+    }
+    /* 框选所在句：从选中锚点向上找 .rw token 取其句子原文 */
+    function selectionSentence() {
+      var sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return "";
+      var node = sel.anchorNode;
+      var span = (node && node.nodeType === 3) ? node.parentElement : node;
+      if (span && span.closest) span = span.closest(".rw");
+      if (span && span.dataset && span.dataset.sid && _sidText && _sidText[span.dataset.sid]) {
+        return _sidText[span.dataset.sid].trim();
+      }
+      return "";
     }
     document.addEventListener("mouseup", function (e) {
       var sel = window.getSelection();
@@ -380,16 +541,18 @@
       if (!/[A-Za-z]/.test(text)) return;
       var t = e.target;
       if (t && t.closest && t.closest("#reader-controls, #lexi-float")) return;
-      /* 选中内容：优先看是否整段/整句，而非只取首个词。
-         若整个选中文本本身就是一个已标记生词 → 直接用本地释义；
-         否则整段交给翻译接口（支持短语/句子/多句）。 */
-      var single = /^[A-Za-z][A-Za-z'\-]*$/.test(text);
-      var q = single ? text.toLowerCase() : text;
-      if (single) {
-        var meaning = ((loadLocalVocab())[q] || {}).meaning || "";
-        if (meaning) { showFloat(e.clientX, e.clientY, q, meaning); return; }
-      }
-      lookup(q).then(function (zh) { showFloat(e.clientX, e.clientY, q, zh); });
+      var rect;
+      try { rect = sel.getRangeAt(0).getBoundingClientRect(); } catch (err) { return; }
+      var key = cleanKey(text);
+      var local = loadLocalVocab();
+      var marked = !!local[key];
+      var sent = selectionSentence();
+      /* 整句翻译（把选中片段用标记包裹），截取选中片段的中文释义；
+         已标记则直接显示本地释义。 */
+      translateSentence(sent, text).then(function (tr) {
+        var zh = marked ? (local[key].meaning || "") : (tr ? (tr.extracted || tr.full) : "");
+        showCard(rect, text, zh, marked, { sentence: sent, fullTrans: tr ? tr.full : "" });
+      });
     });
 
     /* ---- 初始聚焦 ---- */

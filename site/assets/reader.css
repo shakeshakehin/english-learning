@@ -436,28 +436,72 @@ body.focus-on .rw.vocab {
   opacity: 0.6;
 }
 
-/* ===== 框选翻译浮层 ===== */
+/* ===== 统一翻译/标记浮层（词/短语卡片） ===== */
 #lexi-float {
   position: fixed;
   z-index: 250;
-  max-width: 320px;
-  background: rgba(30, 30, 30, 0.95);
+  max-width: 340px;
+  background: rgba(30, 30, 30, 0.96);
   color: #fff;
   font-size: 13px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  pointer-events: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
+#lexi-float .lf-close {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+#lexi-float .lf-close:hover { color: #fff; }
 #lexi-float strong {
   display: block;
   color: #ffd54f;
   font-size: 14px;
-  margin-bottom: 3px;
+  margin: 0 14px 3px 0;
   word-break: break-all;
 }
-#lexi-float span {
+#lexi-float .lf-zh {
+  display: block;
   word-break: break-all;
+  line-height: 1.45;
+}
+#lexi-float .lf-sent {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.22);
+  font-size: 12px;
+  opacity: 0.82;
+  line-height: 1.5;
+  word-break: break-all;
+}
+#lexi-float .lf-foot {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+#lexi-float .lf-mark {
+  font-size: 12px;
+  padding: 3px 12px;
+  border: 1px solid #ffd54f;
+  border-radius: 14px;
+  background: transparent;
+  color: #ffd54f;
+  cursor: pointer;
+}
+#lexi-float .lf-mark:hover { background: #ffd54f; color: #222; }
+#lexi-float .lf-status {
+  font-size: 12px;
+  color: #7bd88f;
 }
 
 /* 生词表页：本地同步状态 */
@@ -469,3 +513,32 @@ body.focus-on .rw.vocab {
   background: rgba(0,0,0,0.04);
   border: 1px solid rgba(0,0,0,0.08);
 }
+
+/* ===== 段意自检卡 ===== */
+.pgist {
+  margin: 4px 0 14px;
+}
+.pgist-t {
+  font-size: 12px;
+  color: var(--md-default-fg-color, inherit);
+  opacity: 0.55;
+  background: transparent;
+  border: 1px dashed rgba(0, 0, 0, 0.22);
+  border-radius: 14px;
+  padding: 3px 14px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.pgist-t:hover { opacity: 0.9; }
+.pgist-t.open { opacity: 0.85; }
+.pgist-b {
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-left: 3px solid rgba(184, 134, 11, 0.6);
+  border-radius: 4px;
+  background: rgba(184, 134, 11, 0.08);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--md-default-fg-color, inherit);
+}
+.pgist-b[hidden] { display: none; }

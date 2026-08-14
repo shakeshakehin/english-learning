@@ -1,1 +1,58 @@
-{}
+{
+ "the": {
+  "meaning": "这",
+  "ts": 1786628363256,
+  "sentence": "Scott Bessent, the US treasury secretary.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "treasury": {
+  "meaning": "国库",
+  "ts": 1786628376235,
+  "sentence": "Scott Bessent, the US treasury secretary.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "secretary": {
+  "meaning": "秘书",
+  "ts": 1786628378583,
+  "sentence": "Scott Bessent, the US treasury secretary.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "treasuries": {
+  "meaning": "国库券",
+  "ts": 1786628389646,
+  "sentence": "Instead, Mr Bessent has allowed Japan to borrow dollars against its treasuries and use those dollars to buy yen.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "slid": {
+  "meaning": "滑了",
+  "ts": 1786628404186,
+  "sentence": "Japan’s yen has slid back towards 160 to the dollar, despite last month’s extraordinary US-Japanese intervention.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "back": {
+  "meaning": "后退",
+  "ts": 1786628409340,
+  "sentence": "Japan’s yen has slid back towards 160 to the dollar, despite last month’s extraordinary US-Japanese intervention.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "extraordinary": {
+  "meaning": "非凡的",
+  "ts": 1786628441871,
+  "sentence": "Japan’s yen has slid back towards 160 to the dollar, despite last month’s extraordinary US-Japanese intervention.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ },
+ "intervention": {
+  "meaning": "干涉",
+  "ts": 1786628494641,
+  "sentence": "Japan’s yen has slid back towards 160 to the dollar, despite last month’s extraordinary US-Japanese intervention.",
+  "article": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+  "date": "2026-08-13"
+ }
+}
